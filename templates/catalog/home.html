@@ -3,197 +3,255 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#2f162b">
-  <meta name="description" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} — decorações autorais para aniversários, celebrações e eventos.">
-  <meta property="og:title" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decorações">
-  <meta property="og:description" content="Cenários que transformam celebrações em memórias inesquecíveis.">
-  <title>{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decorações</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#4b163b">
+  <meta name="description" content="Aline Nayane & Érica Carina — decorações premium para aniversários, celebrações e eventos.">
+  <title>{{ site.business_name }}</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-
   <header class="topbar">
     <a class="brand" href="#inicio" aria-label="Ir para o início">
-      <span class="brand-mark">AE</span>
+      <img src="{% static 'catalog/logo-aline-erika-premium.png' %}" alt="Logo Aline Nayane & Érica Carina Decoração">
       <span class="brand-copy">
-        <strong>{{ site.decorator_one_name }} <i>&</i> {{ site.decorator_two_name }}</strong>
-        <small>Decoradoras • celebrações com assinatura</small>
+        <strong>Aline Nayane & Érica Carina</strong>
+        <small>Decoração premium</small>
       </span>
     </a>
 
-    <nav aria-label="Navegação principal">
-      <a href="#decoradoras">As decoradoras</a>
-      <a href="#catalogo">Portfólio</a>
-      <a href="#experiencia">Experiência</a>
+    <nav>
+      <a href="#inicio">Início</a>
+      <a href="#historia">Nossa história</a>
+      <a href="#catalogo">Inspirações</a>
+      <a href="#instagram">Instagram</a>
       <a href="#contato">Contato</a>
     </nav>
 
-    <button class="cart-button" id="openCart" type="button">
-      <span>Meu pedido</span><strong id="cartCount">0</strong>
-    </button>
+    <div class="header-actions">
+      <a class="instagram-mini" href="https://instagram.com/aline.naiane.35" target="_blank" rel="noopener" aria-label="Instagram de Aline Nayane">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg>
+      </a>
+      <button class="cart-button" id="openCart">Solicitações <strong id="cartCount">0</strong></button>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-copy reveal">
-        <span class="kicker">Decoração autoral • momentos únicos</span>
-        <p class="hero-names">{{ site.decorator_one_name }} <span>&</span> {{ site.decorator_two_name }}</p>
-        <h1>Cenários que fazem o seu momento <em>ser lembrado.</em></h1>
-        <p class="hero-lead">Cada comemoração recebe um olhar cuidadoso: composição, cores, cenografia e detalhes pensados para transformar a ocasião em uma experiência bonita, afetiva e marcante.</p>
+      <div class="hero-copy">
+        <span class="eyebrow">Estúdio de decoração • celebrações personalizadas</span>
+
+        <div class="names-badge">
+          <span>Aline Nayane</span>
+          <i>&</i>
+          <span>Érica Carina</span>
+        </div>
+
+        <h1>Transformamos inspirações em cenários únicos para o seu momento especial.</h1>
+
+        <p>
+          Mais do que vender uma decoração pronta, nós criamos experiências personalizadas.
+          Você escolhe uma <strong>inspiração</strong>, conta o <strong>tema real da sua festa</strong>
+          e nós adaptamos cada detalhe com o nosso toque.
+        </p>
 
         <div class="hero-actions">
-          <a class="btn primary" href="#catalogo">Explorar portfólio <span>↗</span></a>
-          <button class="btn secondary" id="heroCart" type="button">Montar solicitação</button>
+          <a class="btn primary" href="#catalogo">Escolher uma inspiração</a>
+          <button class="btn secondary" id="heroCart">Montar minha solicitação</button>
         </div>
 
-        <div class="trust-row">
-          <div><b>Curadoria</b><span>Estética pensada para cada ocasião</span></div>
-          <div><b>Personalização</b><span>Detalhes que carregam identidade</span></div>
-          <div><b>Atendimento direto</b><span>Solicitação organizada pelo WhatsApp</span></div>
+        <div class="hero-highlights">
+          <article><strong>Projetos autorais</strong><span>com delicadeza, elegância e personalidade</span></article>
+          <article><strong>Inspiração + personalização</strong><span>o cliente escolhe a base e adapta ao tema da festa</span></article>
+          <article><strong>Atendimento direto</strong><span>solicitação enviada com todos os detalhes para o WhatsApp</span></article>
         </div>
       </div>
 
-      <div class="hero-gallery reveal" aria-label="Seleção de decorações">
-        <figure class="gallery-main">
-          <img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Decoração em destaque" fetchpriority="high">
-          <figcaption><span>01</span> Celebrações com personalidade</figcaption>
-        </figure>
-        <figure class="gallery-small gallery-a">
-          <img src="{% static 'catalog/images/pagina-07-1.jpeg' %}" alt="Decoração delicada">
-        </figure>
-        <figure class="gallery-small gallery-b">
-          <img src="{% static 'catalog/images/pagina-09-2.jpeg' %}" alt="Decoração sofisticada">
-        </figure>
-        <div class="gallery-seal"><span>♡</span><b>feito para<br>encantar</b></div>
+      <div class="hero-visual">
+        <div class="hero-card main">
+          <img src="{% static 'catalog/images/pagina-01-1.jpeg' %}" alt="Catálogo de decorações">
+        </div>
+        <div class="hero-card secondary">
+          <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="Nossa história">
+        </div>
+        <div class="floating-note note-one">Elegância em cada detalhe ✦</div>
+        <div class="floating-note note-two">Inspirações que ganham o seu tema ♡</div>
       </div>
     </section>
 
-    <section class="signature-strip" aria-label="Especialidades">
-      <div>ANIVERSÁRIOS</div><i>✦</i><div>CELEBRAÇÕES</div><i>✦</i><div>EVENTOS</div><i>✦</i><div>CENOGRAFIA AFETIVA</div>
+    <section class="signature-strip">
+      <div>
+        <small>Decoração • aniversários • celebrações • eventos</small>
+        <strong>Aline Nayane & Érica Carina</strong>
+      </div>
+      <p>
+        Um estúdio visual pensado para encantar, emocionar e transformar cada comemoração
+        em uma memória especial.
+      </p>
     </section>
 
-    <section class="decorators section" id="decoradoras">
-      <div class="decorators-intro reveal">
-        <span class="kicker">As decoradoras</span>
-        <h2>Duas criadoras.<br><em>Uma assinatura.</em></h2>
-        <p>O trabalho nasce da parceria entre duas profissionais que unem repertório, sensibilidade e atenção aos detalhes. Cada projeto é construído para refletir o clima da celebração — sem parecer genérico ou repetido.</p>
+    <section class="story section" id="historia">
+      <div class="story-grid">
+        <div class="story-intro">
+          <span class="eyebrow">Nossa história</span>
+          <h2>Duas decoradoras, um olhar criativo e muito carinho em cada montagem.</h2>
+          <p>
+            Aline Nayane e Érica Carina uniram talentos, sensibilidade e dedicação para criar
+            decorações que vão além do visual: cada cenário é pensado para transmitir emoção e
+            deixar a celebração ainda mais inesquecível.
+          </p>
+          <p>
+            Nosso trabalho nasce da inspiração, mas ganha vida na personalização. É por isso que
+            cada cliente pode escolher uma composição como referência e adaptar tudo ao seu próprio tema.
+          </p>
+        </div>
+
+        <div class="story-panels">
+          <article class="story-panel accent">
+            <h3>Aline Nayane</h3>
+            <p>Decoradora</p>
+            <span>Olhar delicado, criativo e apaixonado por detalhes.</span>
+          </article>
+          <article class="story-panel">
+            <h3>Érica Carina</h3>
+            <p>Decoradora</p>
+            <span>Composição, sensibilidade visual e cenários que encantam.</span>
+          </article>
+          <figure class="story-image">
+            <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="História das decoradoras">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="instagram-section section" id="instagram">
+      <div class="section-head centered">
+        <div>
+          <span class="eyebrow">Instagram oficial</span>
+          <h2>Acompanhe o trabalho das decoradoras.</h2>
+        </div>
       </div>
 
-      <div class="decorator-cards reveal">
-        <article class="decorator-card">
-          <span class="decorator-index">01</span>
-          <div class="decorator-monogram">AN</div>
-          <div>
-            <small>Decoradora</small>
-            <h3>{{ site.decorator_one_name }}</h3>
-            <p>Criação, composição e cuidado para transformar ideias em cenários que acolhem e impressionam.</p>
+      <div class="instagram-grid">
+        <a class="instagram-card" href="https://instagram.com/aline.naiane.35" target="_blank" rel="noopener">
+          <div class="instagram-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg>
           </div>
-        </article>
-        <article class="decorator-card accent">
-          <span class="decorator-index">02</span>
-          <div class="decorator-monogram">EC</div>
           <div>
-            <small>Decoradora</small>
-            <h3>{{ site.decorator_two_name }}</h3>
-            <p>Olhar criativo e sensível para cores, elementos e acabamentos que tornam cada celebração singular.</p>
+            <small>Instagram de</small>
+            <h3>Aline Nayane</h3>
+            <p>@aline.naiane.35</p>
           </div>
-        </article>
-      </div>
-    </section>
+          <span>Ver perfil →</span>
+        </a>
 
-    <section class="editorial section reveal">
-      <div class="editorial-photo">
-        <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="História de Aline Naiane e Erika Carina" loading="lazy">
-      </div>
-      <div class="editorial-copy">
-        <span class="eyebrow-number">NOSSA HISTÓRIA / 02</span>
-        <blockquote>“Mais do que decorar, queremos criar ambientes que transmitam carinho e façam parte das melhores memórias.”</blockquote>
-        <p>Uma parceria construída por amizade, criatividade e talentos que se complementam. O resultado aparece em cada detalhe: do primeiro conceito à composição final.</p>
-        <a href="#catalogo" class="text-link">Conhecer os projetos <span>→</span></a>
+        <a class="instagram-card" href="https://instagram.com/erikacarin_decor" target="_blank" rel="noopener">
+          <div class="instagram-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg>
+          </div>
+          <div>
+            <small>Instagram de</small>
+            <h3>Érica Carina</h3>
+            <p>@erikacarin_decor</p>
+          </div>
+          <span>Ver perfil →</span>
+        </a>
       </div>
     </section>
 
     <section class="catalog section" id="catalogo">
-      <div class="section-head reveal">
+      <div class="section-head">
         <div>
-          <span class="kicker">Portfólio selecionado</span>
-          <h2>Escolha uma referência.<br><em>Nós cuidamos do encanto.</em></h2>
+          <span class="eyebrow">Portfólio de inspirações</span>
+          <h2>Escolha a inspiração que mais combina com a sua festa.</h2>
         </div>
-        <p>Você pode selecionar uma ou mais decorações e enviar uma solicitação. Os valores são referências e podem variar de acordo com data, tamanho, local, disponibilidade e personalização.</p>
+        <p>
+          Cada card representa uma <strong>inspiração de montagem</strong>. O cliente pode gostar
+          da composição, da estrutura, das cores ou dos elementos — e pedir uma personalização
+          completa para o tema verdadeiro da festa.
+        </p>
       </div>
 
-      <div class="catalog-toolbar reveal">
-        <div class="search-box">
-          <span>⌕</span>
-          <input id="catalogSearch" type="search" placeholder="Buscar tema ou decoração..." autocomplete="off">
-        </div>
-        <div class="filters" role="group" aria-label="Filtrar catálogo">
-          <button class="filter active" data-filter="TODOS" type="button">Todos</button>
-          <button class="filter" data-filter="INFANTIL" type="button">Infantil</button>
-          <button class="filter" data-filter="ADULTO" type="button">Adulto</button>
-          <button class="filter" data-filter="EVENTOS" type="button">Eventos</button>
-        </div>
+      <div class="catalog-note">
+        <strong>Importante:</strong>
+        os valores abaixo são <b>referências</b>. O valor final pode variar conforme tema,
+        personalização, tamanho da decoração e itens escolhidos.
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-filter="TODOS">Todos</button>
+        <button class="filter" data-filter="INFANTIL">Infantil</button>
+        <button class="filter" data-filter="ADULTO">Adulto</button>
+        <button class="filter" data-filter="EVENTOS">Eventos</button>
       </div>
 
       <div class="grid" id="catalogGrid">
         {% for item in decorations %}
-        <article class="card reveal" data-category="{{ item.category }}" data-search="{{ item.title|lower }} {{ item.description|lower }} {{ item.get_category_display|lower }}">
-          <button class="image-button" type="button" data-full="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}" aria-label="Ampliar {{ item.title }}">
+        <article class="card" data-category="{{ item.category }}">
+          <button class="image-button" data-full="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
             <img src="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}" alt="{{ item.title }}" loading="lazy">
-            <span class="image-number">{{ forloop.counter|stringformat:"02d" }}</span>
-            <span class="image-view">Ver projeto ↗</span>
+            <span>Ver inspiração</span>
           </button>
+
           <div class="card-copy">
             <div class="meta">
               <small>{{ item.get_category_display }}</small>
-              <strong>A partir de <b>R$ {{ item.price }}</b></strong>
+              <strong>Referência: R$ {{ item.price }}</strong>
             </div>
+
             <h3>{{ item.title }}</h3>
+
             <p>{{ item.description }}</p>
+
+            <div class="inspiration-copy">
+              Esta inspiração pode ser adaptada para outro tema, mantendo a base visual,
+              a composição e os detalhes que você mais gostou.
+            </div>
+
             <button class="add-btn"
-              type="button"
               data-id="{{ item.id }}"
               data-title="{{ item.title|escape }}"
               data-price="{{ item.price }}"
               data-image="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
-              <span>Adicionar à solicitação</span><b>＋</b>
+              Quero esta inspiração
             </button>
           </div>
         </article>
         {% endfor %}
       </div>
-      <div class="no-results" id="noResults" hidden>Nenhuma decoração encontrada com esse filtro.</div>
     </section>
 
-    <section class="experience section" id="experiencia">
-      <div class="experience-title reveal">
-        <span class="kicker">A experiência</span>
-        <h2>Bonito no olhar.<br><em>Simples para contratar.</em></h2>
-      </div>
-      <div class="experience-grid reveal">
-        <article><span>01</span><h3>Inspire-se</h3><p>Navegue pelas referências e escolha os estilos que combinam com seu momento.</p></article>
-        <article><span>02</span><h3>Conte sua ideia</h3><p>Informe nome, WhatsApp, data e os detalhes que tornam a comemoração única.</p></article>
-        <article><span>03</span><h3>Receba atendimento</h3><p>Sua solicitação fica registrada e chega organizada para o atendimento das decoradoras.</p></article>
-        <article><span>04</span><h3>Personalize</h3><p>Disponibilidade, adaptações e investimento final são alinhados diretamente no WhatsApp.</p></article>
-      </div>
-    </section>
-
-    <section class="cta-section section" id="contato">
-      <div class="cta-card reveal">
+    <section class="how section" id="como">
+      <div class="section-head centered">
         <div>
-          <span class="kicker light">Seu momento começa aqui</span>
-          <h2>Qual celebração você quer transformar?</h2>
-          <p>Monte sua seleção pelo catálogo ou fale diretamente pelo WhatsApp. Aline Naiane e Erika Carina recebem sua ideia e continuam o atendimento por lá.</p>
+          <span class="eyebrow">Como funciona</span>
+          <h2>Você escolhe a inspiração e nós personalizamos a sua festa.</h2>
         </div>
+      </div>
+
+      <div class="steps">
+        <article><b>01</b><h3>Explore</h3><p>Veja as inspirações e escolha a montagem que mais chamou a sua atenção.</p></article>
+        <article><b>02</b><h3>Solicite</h3><p>Adicione a inspiração e informe o tema verdadeiro da sua festa, a data e os detalhes.</p></article>
+        <article><b>03</b><h3>Personalize</h3><p>Aline Nayane e Érica Carina adaptam a referência ao seu estilo e à sua comemoração.</p></article>
+        <article><b>04</b><h3>Confirme</h3><p>O pedido é enviado para atendimento e o orçamento final é alinhado diretamente com as decoradoras.</p></article>
+      </div>
+    </section>
+
+    <section class="cta-premium section" id="contato">
+      <div class="cta-card">
+        <div class="cta-copy">
+          <span class="eyebrow">Fale com as decoradoras</span>
+          <h2>Seu evento merece uma decoração única, elegante e inesquecível.</h2>
+          <p>
+            Escolha uma inspiração, envie sua solicitação e deixe que Aline Nayane & Érica Carina
+            transformem a sua ideia em um cenário feito com carinho, beleza e personalidade.
+          </p>
+        </div>
+
         <div class="cta-actions">
-          <button class="btn light-btn" id="ctaCart" type="button">Montar solicitação</button>
-          {% if site.owner_whatsapp %}
-          <a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20decora%C3%A7%C3%B5es%20e%20quero%20conversar%20sobre%20um%20evento." target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
-          {% endif %}
+          <a class="cta-btn main" href="https://wa.me/5598996127032" target="_blank" rel="noopener">WhatsApp • 98 99612-7032</a>
+          <a class="cta-btn light" href="https://instagram.com/aline.naiane.35" target="_blank" rel="noopener">Instagram • Aline Nayane</a>
+          <a class="cta-btn light" href="https://instagram.com/erikacarin_decor" target="_blank" rel="noopener">Instagram • Érica Carina</a>
         </div>
       </div>
     </section>
@@ -201,48 +259,52 @@
 
   <aside class="drawer" id="cartDrawer" aria-hidden="true">
     <div class="drawer-head">
-      <div><small>Solicitação de orçamento</small><h2>Suas escolhas</h2></div>
-      <button id="closeCart" aria-label="Fechar" type="button">×</button>
+      <div><small>Sua solicitação</small><h2>Inspirações escolhidas</h2></div>
+      <button id="closeCart" aria-label="Fechar">×</button>
     </div>
 
-    <div class="drawer-intro">Selecione suas referências favoritas. O valor abaixo é apenas uma estimativa inicial.</div>
+    <div class="drawer-lead">
+      Escolha uma ou mais inspirações. Depois informe o tema real da festa e os detalhes
+      que deseja adaptar.
+    </div>
+
     <div id="cartItems" class="cart-items"></div>
     <div class="total-row"><span>Total de referência</span><strong id="cartTotal">R$ 0,00</strong></div>
 
     <form id="checkoutForm">
       {% csrf_token %}
-      <div class="form-row">
-        <label>Seu nome<input name="name" required minlength="2" autocomplete="name" placeholder="Como podemos chamar você?"></label>
-        <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="(98) 99999-9999"></label>
-      </div>
+      <label>Seu nome<input name="name" required minlength="2" placeholder="Como podemos chamar você?"></label>
+      <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" placeholder="(98) 99999-9999"></label>
+      <label>Tema da sua festa<input name="theme_name" placeholder="Ex.: Moranguinho, Safári, Chá revelação..."></label>
       <label>Data do evento <small>(opcional)</small><input name="event_date" type="date"></label>
-      <label>Conte um pouco sobre o evento <small>(opcional)</small><textarea name="notes" rows="4" placeholder="Tema, idade, local, cores, quantidade de convidados, adaptações..."></textarea></label>
-      <label class="consent"><input type="checkbox" name="consent_whatsapp"> <span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
-      <button class="submit-order" type="submit"><span>Enviar solicitação</span><b>→</b></button>
-      <p class="form-note">Nenhum pagamento é realizado pelo site. Disponibilidade e valor final são confirmados no atendimento.</p>
-      <div id="checkoutResult" aria-live="polite"></div>
+      <label>Observações <small>(opcional)</small><textarea name="notes" rows="4" placeholder="Conte o que gostou na inspiração, o que quer manter e o que deseja adaptar no seu tema."></textarea></label>
+      <label class="consent"><input type="checkbox" name="consent_whatsapp"> Autorizo receber mensagens sobre esta solicitação no WhatsApp.</label>
+      <button class="submit-order" type="submit">Enviar solicitação</button>
+      <p class="form-note">Nenhum pagamento é feito nesta etapa. O valor final e a disponibilidade são definidos no atendimento com as decoradoras.</p>
+      <div id="checkoutResult"></div>
     </form>
   </aside>
   <div class="overlay" id="overlay"></div>
 
   <dialog id="imageModal">
-    <button id="closeModal" aria-label="Fechar" type="button">×</button>
+    <button id="closeModal">×</button>
     <img id="modalImage" alt="">
   </dialog>
 
-  {% if site.owner_whatsapp %}
-  <a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20decora%C3%A7%C3%B5es." target="_blank" rel="noopener" aria-label="Falar com as decoradoras pelo WhatsApp">
-    <span class="wa-icon">⌁</span><span class="wa-copy"><b>Fale com as decoradoras</b><small>WhatsApp</small></span>
-  </a>
-  {% endif %}
-
-  <footer>
+  <footer class="site-footer">
     <div class="footer-brand">
-      <span class="brand-mark">AE</span>
-      <span><b>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</b><small>Decoração autoral para momentos especiais</small></span>
+      <img src="{% static 'catalog/logo-aline-erika-premium.png' %}" alt="Logo Aline Nayane & Érica Carina">
+      <div>
+        <b>Aline Nayane & Érica Carina</b>
+        <span>Decoração premium para aniversários, celebrações e eventos.</span>
+      </div>
     </div>
-    <p>Portfólio • Orçamentos • Celebrações • Eventos</p>
-    <a href="#inicio">Voltar ao topo ↑</a>
+
+    <div class="footer-socials">
+      <a href="https://instagram.com/aline.naiane.35" target="_blank" rel="noopener">@aline.naiane.35</a>
+      <a href="https://instagram.com/erikacarin_decor" target="_blank" rel="noopener">@erikacarin_decor</a>
+      <a href="#inicio">Voltar ao topo ↑</a>
+    </div>
   </footer>
 
   <script src="{% static 'catalog/site.js' %}"></script>
