@@ -1,0 +1,144 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#4d1b48">
+  <meta name="description" content="Catálogo público de decorações para aniversários, celebrações e eventos.">
+  <title>{{ site.business_name }}</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio"><span>♡</span><b>{{ site.business_name }}</b></a>
+    <nav>
+      <a href="#historia">Nossa história</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#como">Como funciona</a>
+    </nav>
+    <button class="cart-button" id="openCart">Pedido <strong id="cartCount">0</strong></button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="kicker">{{ site.owners }}</span>
+        <h1>{{ site.hero_title }}</h1>
+        <p>Aniversários, celebrações e eventos com cenários personalizados, acabamento elegante e detalhes pensados para cada ocasião.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#catalogo">Ver catálogo</a>
+          <button class="btn secondary" id="heroCart">Montar meu pedido</button>
+        </div>
+        <div class="facts">
+          <span><b>Catálogo público</b><small>sem login para clientes</small></span>
+          <span><b>Pedido rápido</b><small>com nome e WhatsApp</small></span>
+          <span><b>Atendimento direto</b><small>pedido organizado para o responsável</small></span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img src="{% static 'catalog/images/pagina-01-1.jpeg' %}" alt="Capa do catálogo">
+        <i class="badge one">Detalhes que encantam ✦</i>
+        <i class="badge two">Feito com amor ♡</i>
+      </div>
+    </section>
+
+    <section class="story section" id="historia">
+      <div>
+        <span class="kicker">Nossa história</span>
+        <h2>Duas mentes criativas que se complementam.</h2>
+        <p>O projeto nasceu da amizade, parceria e união de talentos. A proposta é colocar um pouco de carinho em cada decoração e transformar momentos especiais em celebrações inesquecíveis.</p>
+        <p>Mais do que decorar, a intenção é criar ambientes que transmitam emoção e façam parte das melhores memórias de quem escolhe o trabalho.</p>
+      </div>
+      <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="Nossa história">
+    </section>
+
+    <section class="catalog section" id="catalogo">
+      <div class="section-head">
+        <div><span class="kicker">Portfólio</span><h2>Escolha sua decoração.</h2></div>
+        <p>Adicione uma ou mais opções ao pedido. Os valores abaixo são referências do catálogo e podem variar conforme tamanho, personalização, data e necessidade do evento.</p>
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-filter="TODOS">Todos</button>
+        <button class="filter" data-filter="INFANTIL">Infantil</button>
+        <button class="filter" data-filter="ADULTO">Adulto</button>
+        <button class="filter" data-filter="EVENTOS">Eventos</button>
+      </div>
+
+      <div class="grid" id="catalogGrid">
+        {% for item in decorations %}
+        <article class="card" data-category="{{ item.category }}">
+          <button class="image-button" data-full="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
+            <img src="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}" alt="{{ item.title }}" loading="lazy">
+            <span>Ver detalhes</span>
+          </button>
+          <div class="card-copy">
+            <div class="meta">
+              <small>{{ item.get_category_display }}</small>
+              <strong>R$ {{ item.price }}</strong>
+            </div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <button class="add-btn"
+              data-id="{{ item.id }}"
+              data-title="{{ item.title|escape }}"
+              data-price="{{ item.price }}"
+              data-image="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
+              Adicionar ao pedido
+            </button>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="how section" id="como">
+      <div class="section-head centered"><div><span class="kicker">Como funciona</span><h2>Da escolha ao atendimento.</h2></div></div>
+      <div class="steps">
+        <article><b>01</b><h3>Escolha</h3><p>Veja as decorações e adicione as opções que mais combinam com o evento.</p></article>
+        <article><b>02</b><h3>Identifique-se</h3><p>Informe seu nome, WhatsApp, data do evento e observações importantes.</p></article>
+        <article><b>03</b><h3>Envie o pedido</h3><p>O pedido é registrado no sistema e preparado para o atendimento via WhatsApp.</p></article>
+        <article><b>04</b><h3>Acompanhe</h3><p>O responsável pode confirmar, finalizar ou atualizar o pedido pelo painel administrativo.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div><small>Seu pedido</small><h2>Decorações escolhidas</h2></div>
+      <button id="closeCart" aria-label="Fechar">×</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="total-row"><span>Total de referência</span><strong id="cartTotal">R$ 0,00</strong></div>
+
+    <form id="checkoutForm">
+      {% csrf_token %}
+      <label>Seu nome<input name="name" required minlength="2" placeholder="Como podemos chamar você?"></label>
+      <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" placeholder="(98) 99999-9999"></label>
+      <label>Data do evento <small>(opcional)</small><input name="event_date" type="date"></label>
+      <label>Observações <small>(opcional)</small><textarea name="notes" rows="3" placeholder="Tema, idade, local, cores, adaptações..."></textarea></label>
+      <label class="consent"><input type="checkbox" name="consent_whatsapp"> Autorizo receber mensagens sobre esta solicitação no WhatsApp.</label>
+      <button class="submit-order" type="submit">Enviar solicitação</button>
+      <p class="form-note">Nenhum pagamento é feito por esta página. O valor final e a disponibilidade são confirmados no atendimento.</p>
+      <div id="checkoutResult"></div>
+    </form>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <dialog id="imageModal">
+    <button id="closeModal">×</button>
+    <img id="modalImage" alt="">
+  </dialog>
+
+  <footer>
+    <div><b>{{ site.business_name }}</b><span>{{ site.owners }}</span></div>
+    <p>Aniversários • Celebrações • Eventos</p>
+    <a href="#inicio">Voltar ao topo ↑</a>
+  </footer>
+
+  <script src="{% static 'catalog/site.js' %}"></script>
+  <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');</script>
+</body>
+</html>

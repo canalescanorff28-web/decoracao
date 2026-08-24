@@ -1,0 +1,24 @@
+# Checklist de deploy no Runsite.app
+
+- [ ] Criar/usar repositório GitHub.
+- [ ] Fazer push deste projeto para `main`.
+- [ ] Entrar no dashboard do Runsite.
+- [ ] Criar um Project.
+- [ ] Adicionar um Web Service.
+- [ ] Conectar GitHub.
+- [ ] Selecionar o repositório e branch `main`.
+- [ ] Confirmar Dockerfile.
+- [ ] Configurar porta `8080`.
+- [ ] Health check: `/api/health/`.
+- [ ] Criar `SECRET_KEY`.
+- [ ] Definir `DEBUG=0`.
+- [ ] Cadastrar `DATABASE_URL` do Neon.
+- [ ] Definir `ALLOWED_HOSTS=.runsite.app`.
+- [ ] Definir `CSRF_TRUSTED_ORIGINS=https://*.runsite.app`.
+- [ ] Fazer deploy.
+- [ ] Copiar URL `https://...runsite.app`.
+- [ ] Atualizar `PUBLIC_SITE_URL`.
+- [ ] Abrir Shell e rodar `python manage.py createsuperuser`.
+- [ ] Entrar em `/admin/`.
+- [ ] Configurar o WhatsApp do responsável.
+- [ ] No GitHub, definir `SITE_URL` com a URL Runsite para gerar o APK.
