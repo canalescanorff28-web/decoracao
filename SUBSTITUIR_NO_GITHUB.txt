@@ -1,0 +1,7 @@
+VERSÃO FINAL 100%
+
+Copie todo o conteúdo desta pasta para a raiz do repositório GitHub decoracao, mantendo as pastas.
+Confirme a substituição dos arquivos existentes e faça commit/push na branch main.
+
+O Runsite, com Auto Deploy ativado, fará o deploy automaticamente.
+As migrations preservam os dados atuais do Neon e adicionam os novos campos.
