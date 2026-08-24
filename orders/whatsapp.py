@@ -1,11 +1,10 @@
-import os
 import re
-import requests
 from urllib.parse import quote
 
+
 def normalize_phone(value):
-    digits = re.sub(r"\D", "", value or "")
-    return digits
+    return re.sub(r"\D", "", value or "")
+
 
 def wa_link(phone, message):
     phone = normalize_phone(phone)
@@ -13,70 +12,74 @@ def wa_link(phone, message):
         return ""
     return f"https://wa.me/{phone}?text={quote(message)}"
 
-def cloud_configured():
-    return all([
-        os.getenv("WHATSAPP_ACCESS_TOKEN"),
-        os.getenv("WHATSAPP_PHONE_NUMBER_ID"),
-        os.getenv("WHATSAPP_GRAPH_VERSION"),
-        os.getenv("WHATSAPP_AUTO_SEND", "0") == "1",
-    ])
 
-def send_text(to, body):
-    """
-    Envia mensagem de texto pela WhatsApp Business Cloud API.
-    Observação: fora da janela permitida pela Meta, use templates aprovados.
-    """
-    if not cloud_configured():
-        return {"ok": False, "reason": "not_configured"}
+def brl(value):
+    text = f"{value:,.2f}"
+    return text.replace(",", "X").replace(".", ",").replace("X", ".")
 
-    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
-    phone_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
-    version = os.getenv("WHATSAPP_GRAPH_VERSION")
-    url = f"https://graph.facebook.com/{version}/{phone_id}/messages"
-    payload = {
-        "messaging_product": "whatsapp",
-        "to": normalize_phone(to),
-        "type": "text",
-        "text": {"body": body},
-    }
-    r = requests.post(
-        url,
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-        json=payload,
-        timeout=20,
-    )
-    return {"ok": r.ok, "status": r.status_code, "body": r.text[:1000]}
 
 def format_order(order):
     lines = [
-        f"🎈 Novo pedido {order.code}",
-        f"Cliente: {order.customer_name}",
+        "✨ *NOVA SOLICITAÇÃO DE DECORAÇÃO*",
+        f"*Código:* {order.code}",
+        "",
+        "👤 *DADOS DO CLIENTE*",
+        f"Nome: {order.customer_name}",
         f"WhatsApp: {order.customer_whatsapp}",
     ]
+
+    lines += ["", "🎉 *DADOS DO EVENTO*"]
+    if order.event_type:
+        lines.append(f"Tipo: {order.get_event_type_display()}")
+    if order.event_theme:
+        lines.append(f"Tema real da festa: {order.event_theme}")
+    if order.celebrant_name:
+        lines.append(f"Aniversariante / homenageado: {order.celebrant_name}")
+    if order.celebrant_age:
+        lines.append(f"Idade: {order.celebrant_age}")
     if order.event_date:
-        lines.append(f"Data do evento: {order.event_date.strftime('%d/%m/%Y')}")
-    lines.append("")
-    lines.append("Itens:")
+        lines.append(f"Data: {order.event_date.strftime('%d/%m/%Y')}")
+    if order.event_location:
+        lines.append(f"Local: {order.event_location}")
+
+    lines += ["", "💗 *INSPIRAÇÕES ESCOLHIDAS*"]
     for item in order.items.all():
-        lines.append(f"• {item.title_snapshot} — R$ {item.unit_price_snapshot:.2f}")
+        lines.append(f"• {item.title_snapshot} — referência R$ {brl(item.unit_price_snapshot)}")
+
+    if order.keep_details:
+        lines += ["", "✅ *O QUE A CLIENTE QUER MANTER DA INSPIRAÇÃO*", order.keep_details]
+    if order.change_details:
+        lines += ["", "🎨 *O QUE A CLIENTE QUER ADAPTAR / MUDAR*", order.change_details]
+    if order.notes:
+        lines += ["", "📝 *OUTRAS OBSERVAÇÕES*", order.notes]
+
     lines += [
         "",
-        f"Total de referência: R$ {order.total_reference:.2f}",
+        f"💰 *Total de referência:* R$ {brl(order.total_reference)}",
+        "_O valor final pode variar conforme tema, dimensões, itens, local, data e personalização._",
+        "",
+        "Pedido registrado pelo site Aline Nayane & Érica Carina Decoração."
     ]
-    if order.notes:
-        lines += ["", f"Observações: {order.notes}"]
     return "\n".join(lines)
+
 
 def customer_ack(order):
     return (
-        f"Olá, {order.customer_name}! 💕 Recebemos sua solicitação {order.code}. "
-        "Vamos analisar os detalhes e entrar em contato para confirmar disponibilidade, "
-        "personalização e valor final. Obrigada pelo interesse!"
+        f"Olá, {order.customer_name}! 💕 Recebemos sua solicitação {order.code} pelo nosso site. "
+        "Vamos analisar a inspiração escolhida, o tema da sua festa e os detalhes da personalização. "
+        "Em seguida alinhamos disponibilidade e orçamento final por aqui."
     )
 
-def customer_status(order):
-    status = order.get_status_display()
+
+def customer_confirmed(order):
     return (
-        f"Olá, {order.customer_name}! Seu pedido {order.code} foi atualizado para: "
-        f"{status}. Se precisar, responda esta mensagem."
+        f"Olá, {order.customer_name}! ✨ Sua solicitação {order.code} foi marcada como confirmada. "
+        "Vamos seguir com os próximos detalhes da sua decoração por aqui."
+    )
+
+
+def customer_finished(order):
+    return (
+        f"Olá, {order.customer_name}! 💗 A solicitação {order.code} foi finalizada. "
+        "Aline Nayane & Érica Carina agradecem pela confiança!"
     )

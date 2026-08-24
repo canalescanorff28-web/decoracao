@@ -1,10 +1,10 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
-const siteUrl = process.env.SITE_URL || 'https://SEU-PROJETO.runsite.app';
+const siteUrl = process.env.SITE_URL || 'https://decoracao.runsite.app';
 
 const config: CapacitorConfig = {
   appId: 'com.catalogodecor.app',
-  appName: 'Catálogo Decor',
+  appName: 'Aline & Érica Decor',
   webDir: 'mobile',
   server: {
     url: siteUrl,

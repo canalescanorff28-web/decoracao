@@ -103,4 +103,4 @@ SECURE_HSTS_PRELOAD = not DEBUG
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "http://127.0.0.1:8000")
+PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://decoracao.runsite.app")

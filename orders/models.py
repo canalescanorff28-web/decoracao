@@ -2,8 +2,10 @@ import secrets
 from django.db import models
 from catalog.models import Decoration
 
+
 def generate_code():
     return "DEC-" + secrets.token_hex(3).upper()
+
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -13,24 +15,48 @@ class Order(models.Model):
         ("FINALIZADO", "Finalizado"),
         ("CANCELADO", "Cancelado"),
     ]
+    EVENT_TYPE_CHOICES = [
+        ("ANIVERSARIO", "Aniversário"),
+        ("CHÁ", "Chá / Revelação / Bebê"),
+        ("CASAMENTO", "Casamento / Bodas"),
+        ("CORPORATIVO", "Evento corporativo"),
+        ("OUTRO", "Outro"),
+    ]
+
     code = models.CharField(max_length=20, unique=True, default=generate_code, editable=False)
-    customer_name = models.CharField(max_length=120)
-    customer_whatsapp = models.CharField(max_length=30)
-    event_date = models.DateField(null=True, blank=True)
-    notes = models.TextField(blank=True)
-    consent_whatsapp = models.BooleanField(default=False)
+    customer_name = models.CharField(max_length=120, verbose_name="Cliente")
+    customer_whatsapp = models.CharField(max_length=30, verbose_name="WhatsApp")
+
+    event_type = models.CharField(max_length=30, choices=EVENT_TYPE_CHOICES, blank=True, verbose_name="Tipo de evento")
+    event_theme = models.CharField(max_length=180, blank=True, verbose_name="Tema real da festa")
+    celebrant_name = models.CharField(max_length=120, blank=True, verbose_name="Nome do aniversariante / homenageado")
+    celebrant_age = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="Idade")
+    event_date = models.DateField(null=True, blank=True, verbose_name="Data do evento")
+    event_location = models.CharField(max_length=220, blank=True, verbose_name="Local do evento")
+
+    keep_details = models.TextField(blank=True, verbose_name="O que quer manter da inspiração")
+    change_details = models.TextField(blank=True, verbose_name="O que quer adaptar / mudar")
+    notes = models.TextField(blank=True, verbose_name="Outras observações")
+
+    consent_whatsapp = models.BooleanField(default=False, verbose_name="Autorizou contato via WhatsApp")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="RECEBIDO")
-    total_reference = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_reference = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Total de referência")
+
+    # Mantidos por compatibilidade com versões anteriores; o modo final usa wa.me gratuito.
     owner_notified = models.BooleanField(default=False)
     customer_notified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizado em")
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "Solicitação"
+        verbose_name_plural = "Solicitações"
 
     def __str__(self):
         return f"{self.code} - {self.customer_name}"
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
@@ -38,6 +64,10 @@ class OrderItem(models.Model):
     title_snapshot = models.CharField(max_length=180)
     unit_price_snapshot = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        verbose_name = "Inspiração escolhida"
+        verbose_name_plural = "Inspirações escolhidas"
 
     def __str__(self):
         return f"{self.order.code} - {self.title_snapshot}"
