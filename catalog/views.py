@@ -14,12 +14,12 @@ def home(request):
 
 def manifest(request):
     data = {
-        "name": "Catálogo Decorações",
-        "short_name": "Decor",
+        "name": "Aline & Erika Decorações",
+        "short_name": "Aline & Erika",
         "start_url": "/",
         "display": "standalone",
-        "background_color": "#fff8fb",
-        "theme_color": "#4d1b48",
+        "background_color": "#fffaf6",
+        "theme_color": "#2f162b",
         "icons": [
             {"src": static("catalog/icon-192.svg"), "sizes": "192x192", "type": "image/svg+xml"},
             {"src": static("catalog/icon-512.svg"), "sizes": "512x512", "type": "image/svg+xml"},
@@ -29,7 +29,7 @@ def manifest(request):
 
 def service_worker(request):
     js = """
-const CACHE='catalogo-decor-v1';
+const CACHE='catalogo-decor-v2-premium';
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/']))));
 self.addEventListener('fetch',e=>{
   if(e.request.method!=='GET') return;

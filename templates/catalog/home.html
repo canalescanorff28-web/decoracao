@@ -3,138 +3,245 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#4d1b48">
-  <meta name="description" content="Catálogo público de decorações para aniversários, celebrações e eventos.">
-  <title>{{ site.business_name }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2f162b">
+  <meta name="description" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} — decorações autorais para aniversários, celebrações e eventos.">
+  <meta property="og:title" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decorações">
+  <meta property="og:description" content="Cenários que transformam celebrações em memórias inesquecíveis.">
+  <title>{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decorações</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
 </head>
 <body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
   <header class="topbar">
-    <a class="brand" href="#inicio"><span>♡</span><b>{{ site.business_name }}</b></a>
-    <nav>
-      <a href="#historia">Nossa história</a>
-      <a href="#catalogo">Catálogo</a>
-      <a href="#como">Como funciona</a>
+    <a class="brand" href="#inicio" aria-label="Ir para o início">
+      <span class="brand-mark">AE</span>
+      <span class="brand-copy">
+        <strong>{{ site.decorator_one_name }} <i>&</i> {{ site.decorator_two_name }}</strong>
+        <small>Decoradoras • celebrações com assinatura</small>
+      </span>
+    </a>
+
+    <nav aria-label="Navegação principal">
+      <a href="#decoradoras">As decoradoras</a>
+      <a href="#catalogo">Portfólio</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#contato">Contato</a>
     </nav>
-    <button class="cart-button" id="openCart">Pedido <strong id="cartCount">0</strong></button>
+
+    <button class="cart-button" id="openCart" type="button">
+      <span>Meu pedido</span><strong id="cartCount">0</strong>
+    </button>
   </header>
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-copy">
-        <span class="kicker">{{ site.owners }}</span>
-        <h1>{{ site.hero_title }}</h1>
-        <p>Aniversários, celebrações e eventos com cenários personalizados, acabamento elegante e detalhes pensados para cada ocasião.</p>
+      <div class="hero-copy reveal">
+        <span class="kicker">Decoração autoral • momentos únicos</span>
+        <p class="hero-names">{{ site.decorator_one_name }} <span>&</span> {{ site.decorator_two_name }}</p>
+        <h1>Cenários que fazem o seu momento <em>ser lembrado.</em></h1>
+        <p class="hero-lead">Cada comemoração recebe um olhar cuidadoso: composição, cores, cenografia e detalhes pensados para transformar a ocasião em uma experiência bonita, afetiva e marcante.</p>
+
         <div class="hero-actions">
-          <a class="btn primary" href="#catalogo">Ver catálogo</a>
-          <button class="btn secondary" id="heroCart">Montar meu pedido</button>
+          <a class="btn primary" href="#catalogo">Explorar portfólio <span>↗</span></a>
+          <button class="btn secondary" id="heroCart" type="button">Montar solicitação</button>
         </div>
-        <div class="facts">
-          <span><b>Catálogo público</b><small>sem login para clientes</small></span>
-          <span><b>Pedido rápido</b><small>com nome e WhatsApp</small></span>
-          <span><b>Atendimento direto</b><small>pedido organizado para o responsável</small></span>
+
+        <div class="trust-row">
+          <div><b>Curadoria</b><span>Estética pensada para cada ocasião</span></div>
+          <div><b>Personalização</b><span>Detalhes que carregam identidade</span></div>
+          <div><b>Atendimento direto</b><span>Solicitação organizada pelo WhatsApp</span></div>
         </div>
       </div>
-      <div class="hero-art">
-        <img src="{% static 'catalog/images/pagina-01-1.jpeg' %}" alt="Capa do catálogo">
-        <i class="badge one">Detalhes que encantam ✦</i>
-        <i class="badge two">Feito com amor ♡</i>
+
+      <div class="hero-gallery reveal" aria-label="Seleção de decorações">
+        <figure class="gallery-main">
+          <img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Decoração em destaque" fetchpriority="high">
+          <figcaption><span>01</span> Celebrações com personalidade</figcaption>
+        </figure>
+        <figure class="gallery-small gallery-a">
+          <img src="{% static 'catalog/images/pagina-07-1.jpeg' %}" alt="Decoração delicada">
+        </figure>
+        <figure class="gallery-small gallery-b">
+          <img src="{% static 'catalog/images/pagina-09-2.jpeg' %}" alt="Decoração sofisticada">
+        </figure>
+        <div class="gallery-seal"><span>♡</span><b>feito para<br>encantar</b></div>
       </div>
     </section>
 
-    <section class="story section" id="historia">
-      <div>
-        <span class="kicker">Nossa história</span>
-        <h2>Duas mentes criativas que se complementam.</h2>
-        <p>O projeto nasceu da amizade, parceria e união de talentos. A proposta é colocar um pouco de carinho em cada decoração e transformar momentos especiais em celebrações inesquecíveis.</p>
-        <p>Mais do que decorar, a intenção é criar ambientes que transmitam emoção e façam parte das melhores memórias de quem escolhe o trabalho.</p>
+    <section class="signature-strip" aria-label="Especialidades">
+      <div>ANIVERSÁRIOS</div><i>✦</i><div>CELEBRAÇÕES</div><i>✦</i><div>EVENTOS</div><i>✦</i><div>CENOGRAFIA AFETIVA</div>
+    </section>
+
+    <section class="decorators section" id="decoradoras">
+      <div class="decorators-intro reveal">
+        <span class="kicker">As decoradoras</span>
+        <h2>Duas criadoras.<br><em>Uma assinatura.</em></h2>
+        <p>O trabalho nasce da parceria entre duas profissionais que unem repertório, sensibilidade e atenção aos detalhes. Cada projeto é construído para refletir o clima da celebração — sem parecer genérico ou repetido.</p>
       </div>
-      <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="Nossa história">
+
+      <div class="decorator-cards reveal">
+        <article class="decorator-card">
+          <span class="decorator-index">01</span>
+          <div class="decorator-monogram">AN</div>
+          <div>
+            <small>Decoradora</small>
+            <h3>{{ site.decorator_one_name }}</h3>
+            <p>Criação, composição e cuidado para transformar ideias em cenários que acolhem e impressionam.</p>
+          </div>
+        </article>
+        <article class="decorator-card accent">
+          <span class="decorator-index">02</span>
+          <div class="decorator-monogram">EC</div>
+          <div>
+            <small>Decoradora</small>
+            <h3>{{ site.decorator_two_name }}</h3>
+            <p>Olhar criativo e sensível para cores, elementos e acabamentos que tornam cada celebração singular.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="editorial section reveal">
+      <div class="editorial-photo">
+        <img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="História de Aline Naiane e Erika Carina" loading="lazy">
+      </div>
+      <div class="editorial-copy">
+        <span class="eyebrow-number">NOSSA HISTÓRIA / 02</span>
+        <blockquote>“Mais do que decorar, queremos criar ambientes que transmitam carinho e façam parte das melhores memórias.”</blockquote>
+        <p>Uma parceria construída por amizade, criatividade e talentos que se complementam. O resultado aparece em cada detalhe: do primeiro conceito à composição final.</p>
+        <a href="#catalogo" class="text-link">Conhecer os projetos <span>→</span></a>
+      </div>
     </section>
 
     <section class="catalog section" id="catalogo">
-      <div class="section-head">
-        <div><span class="kicker">Portfólio</span><h2>Escolha sua decoração.</h2></div>
-        <p>Adicione uma ou mais opções ao pedido. Os valores abaixo são referências do catálogo e podem variar conforme tamanho, personalização, data e necessidade do evento.</p>
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Portfólio selecionado</span>
+          <h2>Escolha uma referência.<br><em>Nós cuidamos do encanto.</em></h2>
+        </div>
+        <p>Você pode selecionar uma ou mais decorações e enviar uma solicitação. Os valores são referências e podem variar de acordo com data, tamanho, local, disponibilidade e personalização.</p>
       </div>
 
-      <div class="filters">
-        <button class="filter active" data-filter="TODOS">Todos</button>
-        <button class="filter" data-filter="INFANTIL">Infantil</button>
-        <button class="filter" data-filter="ADULTO">Adulto</button>
-        <button class="filter" data-filter="EVENTOS">Eventos</button>
+      <div class="catalog-toolbar reveal">
+        <div class="search-box">
+          <span>⌕</span>
+          <input id="catalogSearch" type="search" placeholder="Buscar tema ou decoração..." autocomplete="off">
+        </div>
+        <div class="filters" role="group" aria-label="Filtrar catálogo">
+          <button class="filter active" data-filter="TODOS" type="button">Todos</button>
+          <button class="filter" data-filter="INFANTIL" type="button">Infantil</button>
+          <button class="filter" data-filter="ADULTO" type="button">Adulto</button>
+          <button class="filter" data-filter="EVENTOS" type="button">Eventos</button>
+        </div>
       </div>
 
       <div class="grid" id="catalogGrid">
         {% for item in decorations %}
-        <article class="card" data-category="{{ item.category }}">
-          <button class="image-button" data-full="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
+        <article class="card reveal" data-category="{{ item.category }}" data-search="{{ item.title|lower }} {{ item.description|lower }} {{ item.get_category_display|lower }}">
+          <button class="image-button" type="button" data-full="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}" aria-label="Ampliar {{ item.title }}">
             <img src="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}" alt="{{ item.title }}" loading="lazy">
-            <span>Ver detalhes</span>
+            <span class="image-number">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="image-view">Ver projeto ↗</span>
           </button>
           <div class="card-copy">
             <div class="meta">
               <small>{{ item.get_category_display }}</small>
-              <strong>R$ {{ item.price }}</strong>
+              <strong>A partir de <b>R$ {{ item.price }}</b></strong>
             </div>
             <h3>{{ item.title }}</h3>
             <p>{{ item.description }}</p>
             <button class="add-btn"
+              type="button"
               data-id="{{ item.id }}"
               data-title="{{ item.title|escape }}"
               data-price="{{ item.price }}"
               data-image="{% if item.image_url %}{{ item.image_url }}{% else %}{% static item.image_path %}{% endif %}">
-              Adicionar ao pedido
+              <span>Adicionar à solicitação</span><b>＋</b>
             </button>
           </div>
         </article>
         {% endfor %}
       </div>
+      <div class="no-results" id="noResults" hidden>Nenhuma decoração encontrada com esse filtro.</div>
     </section>
 
-    <section class="how section" id="como">
-      <div class="section-head centered"><div><span class="kicker">Como funciona</span><h2>Da escolha ao atendimento.</h2></div></div>
-      <div class="steps">
-        <article><b>01</b><h3>Escolha</h3><p>Veja as decorações e adicione as opções que mais combinam com o evento.</p></article>
-        <article><b>02</b><h3>Identifique-se</h3><p>Informe seu nome, WhatsApp, data do evento e observações importantes.</p></article>
-        <article><b>03</b><h3>Envie o pedido</h3><p>O pedido é registrado no sistema e preparado para o atendimento via WhatsApp.</p></article>
-        <article><b>04</b><h3>Acompanhe</h3><p>O responsável pode confirmar, finalizar ou atualizar o pedido pelo painel administrativo.</p></article>
+    <section class="experience section" id="experiencia">
+      <div class="experience-title reveal">
+        <span class="kicker">A experiência</span>
+        <h2>Bonito no olhar.<br><em>Simples para contratar.</em></h2>
+      </div>
+      <div class="experience-grid reveal">
+        <article><span>01</span><h3>Inspire-se</h3><p>Navegue pelas referências e escolha os estilos que combinam com seu momento.</p></article>
+        <article><span>02</span><h3>Conte sua ideia</h3><p>Informe nome, WhatsApp, data e os detalhes que tornam a comemoração única.</p></article>
+        <article><span>03</span><h3>Receba atendimento</h3><p>Sua solicitação fica registrada e chega organizada para o atendimento das decoradoras.</p></article>
+        <article><span>04</span><h3>Personalize</h3><p>Disponibilidade, adaptações e investimento final são alinhados diretamente no WhatsApp.</p></article>
+      </div>
+    </section>
+
+    <section class="cta-section section" id="contato">
+      <div class="cta-card reveal">
+        <div>
+          <span class="kicker light">Seu momento começa aqui</span>
+          <h2>Qual celebração você quer transformar?</h2>
+          <p>Monte sua seleção pelo catálogo ou fale diretamente pelo WhatsApp. Aline Naiane e Erika Carina recebem sua ideia e continuam o atendimento por lá.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="btn light-btn" id="ctaCart" type="button">Montar solicitação</button>
+          {% if site.owner_whatsapp %}
+          <a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20decora%C3%A7%C3%B5es%20e%20quero%20conversar%20sobre%20um%20evento." target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
+          {% endif %}
+        </div>
       </div>
     </section>
   </main>
 
   <aside class="drawer" id="cartDrawer" aria-hidden="true">
     <div class="drawer-head">
-      <div><small>Seu pedido</small><h2>Decorações escolhidas</h2></div>
-      <button id="closeCart" aria-label="Fechar">×</button>
+      <div><small>Solicitação de orçamento</small><h2>Suas escolhas</h2></div>
+      <button id="closeCart" aria-label="Fechar" type="button">×</button>
     </div>
+
+    <div class="drawer-intro">Selecione suas referências favoritas. O valor abaixo é apenas uma estimativa inicial.</div>
     <div id="cartItems" class="cart-items"></div>
     <div class="total-row"><span>Total de referência</span><strong id="cartTotal">R$ 0,00</strong></div>
 
     <form id="checkoutForm">
       {% csrf_token %}
-      <label>Seu nome<input name="name" required minlength="2" placeholder="Como podemos chamar você?"></label>
-      <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" placeholder="(98) 99999-9999"></label>
+      <div class="form-row">
+        <label>Seu nome<input name="name" required minlength="2" autocomplete="name" placeholder="Como podemos chamar você?"></label>
+        <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="(98) 99999-9999"></label>
+      </div>
       <label>Data do evento <small>(opcional)</small><input name="event_date" type="date"></label>
-      <label>Observações <small>(opcional)</small><textarea name="notes" rows="3" placeholder="Tema, idade, local, cores, adaptações..."></textarea></label>
-      <label class="consent"><input type="checkbox" name="consent_whatsapp"> Autorizo receber mensagens sobre esta solicitação no WhatsApp.</label>
-      <button class="submit-order" type="submit">Enviar solicitação</button>
-      <p class="form-note">Nenhum pagamento é feito por esta página. O valor final e a disponibilidade são confirmados no atendimento.</p>
-      <div id="checkoutResult"></div>
+      <label>Conte um pouco sobre o evento <small>(opcional)</small><textarea name="notes" rows="4" placeholder="Tema, idade, local, cores, quantidade de convidados, adaptações..."></textarea></label>
+      <label class="consent"><input type="checkbox" name="consent_whatsapp"> <span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
+      <button class="submit-order" type="submit"><span>Enviar solicitação</span><b>→</b></button>
+      <p class="form-note">Nenhum pagamento é realizado pelo site. Disponibilidade e valor final são confirmados no atendimento.</p>
+      <div id="checkoutResult" aria-live="polite"></div>
     </form>
   </aside>
   <div class="overlay" id="overlay"></div>
 
   <dialog id="imageModal">
-    <button id="closeModal">×</button>
+    <button id="closeModal" aria-label="Fechar" type="button">×</button>
     <img id="modalImage" alt="">
   </dialog>
 
+  {% if site.owner_whatsapp %}
+  <a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20decora%C3%A7%C3%B5es." target="_blank" rel="noopener" aria-label="Falar com as decoradoras pelo WhatsApp">
+    <span class="wa-icon">⌁</span><span class="wa-copy"><b>Fale com as decoradoras</b><small>WhatsApp</small></span>
+  </a>
+  {% endif %}
+
   <footer>
-    <div><b>{{ site.business_name }}</b><span>{{ site.owners }}</span></div>
-    <p>Aniversários • Celebrações • Eventos</p>
+    <div class="footer-brand">
+      <span class="brand-mark">AE</span>
+      <span><b>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</b><small>Decoração autoral para momentos especiais</small></span>
+    </div>
+    <p>Portfólio • Orçamentos • Celebrações • Eventos</p>
     <a href="#inicio">Voltar ao topo ↑</a>
   </footer>
 

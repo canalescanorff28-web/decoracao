@@ -1,15 +1,19 @@
 from django.db import models
 
+
 class SiteSettings(models.Model):
-    business_name = models.CharField(max_length=120, default="Catálogo Decorações")
+    business_name = models.CharField(max_length=120, default="Aline & Erika Decorações")
     owners = models.CharField(max_length=180, default="Aline Naiane & Erika Carina")
+    decorator_one_name = models.CharField(max_length=100, default="Aline Naiane")
+    decorator_two_name = models.CharField(max_length=100, default="Erika Carina")
     hero_title = models.CharField(
         max_length=220,
-        default="Decoração que transforma momentos em memórias."
+        default="Cenários que transformam celebrações em memórias inesquecíveis."
     )
     owner_whatsapp = models.CharField(
         max_length=30,
         blank=True,
+        default="5598996127032",
         help_text="Número que receberá os pedidos. Ex.: 5598999999999"
     )
     instagram_one = models.CharField(max_length=100, default="@aline.naiane.35", blank=True)
