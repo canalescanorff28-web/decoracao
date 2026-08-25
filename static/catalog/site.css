@@ -16,7 +16,7 @@
   --radius:28px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:92px}
+html{scroll-behavior:smooth;scroll-padding-top:132px;scrollbar-gutter:stable}
 body{
   margin:0;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -42,23 +42,23 @@ strong{font-weight:800}
   background:rgba(255,255,255,.90);
   backdrop-filter:blur(24px) saturate(130%);
   border-bottom:1px solid rgba(69,19,47,.07);
-  transition:min-height .25s,box-shadow .25s,background .25s
+  transition:box-shadow .22s ease,background .22s ease,border-color .22s ease
 }
-.topbar.scrolled{min-height:72px;background:rgba(255,255,255,.96);box-shadow:0 8px 30px rgba(56,18,43,.07)}
+.topbar.scrolled{
+  background:rgba(255,255,255,.96);
+  box-shadow:0 8px 30px rgba(56,18,43,.07)
+}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .brand-mark{
   width:104px;height:104px;flex:0 0 auto;display:grid;place-items:center;
   padding:12px;border-radius:24px;background:#fff;
   border:1px solid rgba(115,53,88,.12);
-  box-shadow:0 14px 32px rgba(75,22,59,.14), inset 0 1px 0 rgba(255,255,255,.95);
-  transition:.25s
+  box-shadow:0 14px 32px rgba(75,22,59,.14), inset 0 1px 0 rgba(255,255,255,.95)
 }
 .brand img{
   width:100%;height:100%;object-fit:contain;
-  filter:drop-shadow(0 6px 16px rgba(75,22,59,.10));
-  transition:.25s
+  filter:drop-shadow(0 6px 16px rgba(75,22,59,.10))
 }
-.topbar.scrolled .brand-mark{width:82px;height:82px;padding:9px;border-radius:20px}
 .brand-copy{display:grid;gap:3px}
 .brand-copy strong{font-family:Georgia,serif;color:var(--wine);font-size:19px;line-height:1.05;white-space:nowrap}
 .brand-copy strong i{color:var(--gold);font-style:normal}
@@ -663,4 +663,62 @@ button:disabled{cursor:not-allowed;opacity:.68}
   .gps-card{align-items:flex-start;flex-direction:column}
   .gps-button{width:100%}
   .choice-heading{display:block}.choice-heading small{display:block;margin-top:2px}
+}
+
+
+/* V8.6 — estabilidade visual: sem tremilique ao clicar */
+body.locked{
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+
+/* O estado scrolled altera apenas acabamento, nunca largura/altura. */
+.topbar,
+.topbar.scrolled{
+  contain:style;
+}
+
+/* Evita animações de pressão que pareçam deslocamento. */
+.brand,
+.brand-mark,
+.cart-button,
+.btn,
+.add-btn,
+.whatsapp-float,
+.filter,
+.mobile-menu-button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+.brand:active,
+.brand-mark:active,
+.cart-button:active,
+.btn:active,
+.add-btn:active,
+.whatsapp-float:active,
+.filter:active,
+.mobile-menu-button:active{
+  transform:none!important;
+}
+
+/* Âncoras param com folga abaixo do cabeçalho fixo. */
+#inicio,
+#decoradoras,
+#como-funciona,
+#catalogo,
+#instagram,
+#contato{
+  scroll-margin-top:132px;
+}
+
+@media(max-width:1100px){
+  html{scroll-padding-top:96px}
+  #inicio,
+  #decoradoras,
+  #como-funciona,
+  #catalogo,
+  #instagram,
+  #contato{
+    scroll-margin-top:96px;
+  }
 }

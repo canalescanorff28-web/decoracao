@@ -49,6 +49,12 @@ class PublicSiteTests(TestCase):
         self.assertIn('class="brand-mark"', html)
         self.assertIn('class="footer-brand-mark"', html)
 
+    def test_header_stability_structure(self):
+        response = self.client.get("/")
+        html = response.content.decode("utf-8")
+        self.assertIn('id="siteHeader"', html)
+        self.assertIn('class="brand"', html)
+
     def test_service_worker_does_not_cache_admin_or_api(self):
         response = self.client.get("/service-worker.js")
         text = response.content.decode("utf-8")

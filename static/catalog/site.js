@@ -1,8 +1,19 @@
 const siteHeader = document.querySelector("#siteHeader");
+let headerScrolled = false;
+
 function syncHeader(){
   if(!siteHeader) return;
-  siteHeader.classList.toggle("scrolled", window.scrollY > 28);
+
+  // Histerese: evita alternância rápida do estado perto do topo.
+  if(!headerScrolled && window.scrollY > 44){
+    headerScrolled = true;
+    siteHeader.classList.add("scrolled");
+  }else if(headerScrolled && window.scrollY < 16){
+    headerScrolled = false;
+    siteHeader.classList.remove("scrolled");
+  }
 }
+
 syncHeader();
 window.addEventListener("scroll", syncHeader, {passive:true});
 
@@ -105,11 +116,29 @@ function showDrawerStep(step){
   if(drawer) drawer.scrollTop = 0;
 }
 
+function lockPage(){
+  const scrollbarWidth = Math.max(
+    0,
+    window.innerWidth - document.documentElement.clientWidth
+  );
+
+  document.body.style.paddingRight = scrollbarWidth
+    ? `${scrollbarWidth}px`
+    : "";
+
+  document.body.classList.add("locked");
+}
+
+function unlockPage(){
+  document.body.classList.remove("locked");
+  document.body.style.paddingRight = "";
+}
+
 function openCart(step="summary"){
   drawer?.classList.add("open");
   overlay?.classList.add("open");
   drawer?.setAttribute("aria-hidden", "false");
-  document.body.classList.add("locked");
+  lockPage();
   showDrawerStep(step);
 }
 
@@ -117,7 +146,7 @@ function closeCart(){
   drawer?.classList.remove("open");
   overlay?.classList.remove("open");
   drawer?.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("locked");
+  unlockPage();
 }
 
 document.querySelectorAll("#openCart,#heroCart,#ctaCart").forEach(btn =>
@@ -126,6 +155,27 @@ document.querySelectorAll("#openCart,#heroCart,#ctaCart").forEach(btn =>
 document.querySelector("#closeCart")?.addEventListener("click", closeCart);
 overlay?.addEventListener("click", closeCart);
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeCart(); });
+
+document.querySelector(".brand")?.addEventListener("click", event => {
+  event.preventDefault();
+  setMobileMenu(false);
+
+  if(window.scrollY < 4){
+    history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`
+    );
+    return;
+  }
+
+  window.scrollTo({top:0, behavior:"smooth"});
+  history.replaceState(
+    null,
+    "",
+    `${window.location.pathname}${window.location.search}`
+  );
+});
 
 continueBtn?.addEventListener("click", () => {
   if(!state.cart.length) return;
