@@ -46,8 +46,19 @@ strong{font-weight:800}
 }
 .topbar.scrolled{min-height:72px;background:rgba(255,255,255,.96);box-shadow:0 8px 30px rgba(56,18,43,.07)}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brand img{width:74px;height:74px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(75,22,59,.14));transition:.25s}
-.topbar.scrolled .brand img{width:58px;height:58px}
+.brand-mark{
+  width:104px;height:104px;flex:0 0 auto;display:grid;place-items:center;
+  padding:12px;border-radius:24px;background:#fff;
+  border:1px solid rgba(115,53,88,.12);
+  box-shadow:0 14px 32px rgba(75,22,59,.14), inset 0 1px 0 rgba(255,255,255,.95);
+  transition:.25s
+}
+.brand img{
+  width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 6px 16px rgba(75,22,59,.10));
+  transition:.25s
+}
+.topbar.scrolled .brand-mark{width:82px;height:82px;padding:9px;border-radius:20px}
 .brand-copy{display:grid;gap:3px}
 .brand-copy strong{font-family:Georgia,serif;color:var(--wine);font-size:19px;line-height:1.05;white-space:nowrap}
 .brand-copy strong i{color:var(--gold);font-style:normal}
@@ -348,8 +359,14 @@ footer{
   padding:23px clamp(20px,7vw,108px);
   background:#2d0e22;color:#fff
 }
-.footer-brand{display:flex;align-items:center;gap:12px}
-.footer-brand img{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
+.footer-brand{display:flex;align-items:center;gap:14px}
+.footer-brand-mark{
+  width:82px;height:82px;flex:0 0 auto;display:grid;place-items:center;
+  padding:10px;border-radius:20px;background:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 14px 28px rgba(0,0,0,.18)
+}
+.footer-brand img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(75,22,59,.10))}
 .footer-brand span{display:grid}
 .footer-brand b{font-family:Georgia,serif;font-size:17px;color:#fff}
 .footer-brand small{font-size:8px;color:#cdb9c7;margin-top:3px}
@@ -383,9 +400,10 @@ footer{
 @media(max-width:680px){
   html{scroll-padding-top:72px}
   .topbar{min-height:68px;padding:7px 11px}
-  .brand img{width:54px;height:54px}
+  .brand-mark{width:72px;height:72px;padding:8px;border-radius:18px}
   .brand-copy strong{font-size:13px}
   .brand-copy small{font-size:6px;letter-spacing:.10em}
+  .footer-brand-mark{width:64px;height:64px;padding:7px;border-radius:16px}
   .cart-button span{display:none}
   .cart-button{padding:9px}
   .cart-button strong{margin:0}

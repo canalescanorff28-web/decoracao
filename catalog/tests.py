@@ -46,6 +46,8 @@ class PublicSiteTests(TestCase):
         self.assertIn('name="event_city"', html)
         self.assertIn('name="keep_choices"', html)
         self.assertIn('name="change_choices"', html)
+        self.assertIn('class="brand-mark"', html)
+        self.assertIn('class="footer-brand-mark"', html)
 
     def test_service_worker_does_not_cache_admin_or_api(self):
         response = self.client.get("/service-worker.js")
