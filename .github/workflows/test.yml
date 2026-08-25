@@ -46,3 +46,6 @@ jobs:
 
       - name: Validar arquivos estáticos
         run: python manage.py collectstatic --no-input
+      - name: Validar Docker build
+        run: docker build -t decoracao-ci .
+

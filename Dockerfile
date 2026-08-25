@@ -15,7 +15,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python manage.py collectstatic --no-input
+# O Runsite injeta SECRET_KEY/DATABASE_URL somente no runtime.
+# collectstatic roda durante o build e não precisa acessar o banco de produção.
+# Estas variáveis valem exclusivamente para este comando RUN.
+RUN DEBUG=1 SECRET_KEY=build-only-collectstatic-key python manage.py collectstatic --no-input
 
 RUN chmod +x /app/runsite-start.sh
 

@@ -61,3 +61,9 @@ A URL do Runsite não pôde ser carregada diretamente pelas ferramentas disponí
 - regressões críticas do seed, WhatsApp e service worker: verificadas.
 
 O teste Django completo fica a cargo do GitHub Actions, pois Django não está instalado no runtime local desta sessão.
+
+
+## Correção V7.1 — Build do Runsite
+- Corrigido `Dockerfile`: `collectstatic` agora recebe `DEBUG=1` e uma chave temporária somente durante o comando de build.
+- A chave temporária não é persistida como `ENV` e não substitui a `SECRET_KEY` real de runtime.
+- O GitHub Actions agora executa `docker build`, evitando que esse tipo de falha só apareça depois no Runsite.
