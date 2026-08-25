@@ -44,7 +44,7 @@ def manifest(request):
 
 def service_worker(request):
     js = """
-const CACHE='aline-erica-decor-v3';
+const CACHE='aline-erica-decor-v5';
 self.addEventListener('install',e=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
 self.addEventListener('fetch',e=>{
@@ -52,4 +52,8 @@ self.addEventListener('fetch',e=>{
   e.respondWith(fetch(e.request).then(r=>{const c=r.clone(); caches.open(CACHE).then(cache=>cache.put(e.request,c)); return r;}).catch(()=>caches.match(e.request)));
 });
 """
-    return HttpResponse(js, content_type="application/javascript")
+    response = HttpResponse(js, content_type="application/javascript")
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response["Pragma"] = "no-cache"
+    response["Expires"] = "0"
+    return response

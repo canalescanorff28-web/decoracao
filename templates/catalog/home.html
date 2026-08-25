@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#4b163b">
+  <meta name="theme-color" content="#45132f">
   <meta name="description" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} — inspirações e decorações personalizadas para aniversários, celebrações e eventos.">
   <meta property="og:title" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decoração">
   <meta property="og:description" content="Escolha uma inspiração e personalize para o tema real da sua festa.">
@@ -13,74 +13,203 @@
   <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
 </head>
 <body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
 
-  <header class="topbar">
+  <header class="topbar" id="siteHeader">
     <a class="brand" href="#inicio" aria-label="Início">
       <img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="Aline Nayane e Érica Carina Decoração">
-      <span class="brand-copy"><strong>{{ site.decorator_one_name }} <i>&</i> {{ site.decorator_two_name }}</strong><small>Decoradoras • celebrações com assinatura</small></span>
+      <span class="brand-copy">
+        <strong>{{ site.decorator_one_name }} <i>&</i> {{ site.decorator_two_name }}</strong>
+        <small>Decoradoras • celebrações com assinatura</small>
+      </span>
     </a>
+
     <nav aria-label="Navegação principal">
-      <a href="#decoradoras">As decoradoras</a><a href="#como-funciona">Como funciona</a><a href="#catalogo">Inspirações</a><a href="#instagram">Instagram</a><a href="#contato">Contato</a>
+      <a href="#decoradoras">As decoradoras</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#catalogo">Inspirações</a>
+      <a href="#instagram">Instagram</a>
+      <a href="#contato">Contato</a>
     </nav>
-    <button class="cart-button" id="openCart" type="button"><span>Minha inspiração</span><strong id="cartCount">0</strong></button>
+
+    <button class="cart-button" id="openCart" type="button">
+      <span>Minha inspiração</span><strong id="cartCount">0</strong>
+    </button>
   </header>
 
   <main>
     <section class="hero" id="inicio">
       <div class="hero-copy reveal">
-        <span class="kicker">Decoração autoral • inspiração personalizada</span>
+        <span class="kicker">Estúdio de decoração • projetos personalizados</span>
         <p class="hero-names">{{ site.decorator_one_name }} <span>&</span> {{ site.decorator_two_name }}</p>
-        <h1>Você escolhe a inspiração.<br><em>Nós criamos a sua versão.</em></h1>
-        <p class="hero-lead">As imagens do portfólio são referências de composição. Gostou da montagem Cerejinha, mas sua festa é Moranguinho? Perfeito. Conte o seu tema e os detalhes que quer manter ou transformar — a proposta é adaptada para a sua celebração.</p>
-        <div class="hero-actions"><a class="btn primary" href="#catalogo">Escolher uma inspiração <span>↗</span></a><button class="btn secondary" id="heroCart" type="button">Personalizar minha festa</button></div>
+        <h1>Você escolhe a inspiração.<br><em>Nós transformamos em algo só seu.</em></h1>
+        <p class="hero-lead">
+          Nosso portfólio é um ponto de partida. Você pode se apaixonar pela estrutura,
+          pela composição ou pelos detalhes de uma montagem e pedir tudo adaptado para
+          o <strong>tema verdadeiro da sua festa</strong>.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#catalogo">Explorar inspirações <span>↗</span></a>
+          <button class="btn secondary" id="heroCart" type="button">Personalizar minha festa</button>
+        </div>
         <div class="trust-row">
-          <div><b>Inspiração, não pacote fechado</b><span>A referência visual pode ganhar outro tema.</span></div>
-          <div><b>Personalização real</b><span>Cores, personagens, estrutura e detalhes podem ser adaptados.</span></div>
-          <div><b>WhatsApp gratuito</b><span>O site organiza a solicitação e abre a mensagem pronta.</span></div>
+          <div><b>Referência, não pacote fechado</b><span>O tema da foto não limita a sua escolha.</span></div>
+          <div><b>Personalização de verdade</b><span>Cores, personagens, estrutura e detalhes podem mudar.</span></div>
+          <div><b>Atendimento direto</b><span>A solicitação é organizada e enviada pelo WhatsApp.</span></div>
         </div>
       </div>
+
       <div class="hero-gallery reveal" aria-label="Exemplos de inspirações">
-        <figure class="gallery-main"><img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Inspiração Cerejinha" fetchpriority="high"><figcaption><span>INSPIRAÇÃO</span> Cerejinha</figcaption></figure>
-        <div class="theme-transform"><small>SUA FESTA PODE SER</small><strong>Moranguinho</strong><span>mesma essência • novo tema</span></div>
+        <figure class="gallery-main">
+          <img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Inspiração de decoração" fetchpriority="high">
+          <figcaption><span>REFERÊNCIA DE MONTAGEM</span><b>Uma inspiração pode ganhar outro tema</b></figcaption>
+        </figure>
         <figure class="gallery-small gallery-a"><img src="{% static 'catalog/images/pagina-07-1.jpeg' %}" alt="Inspiração delicada"></figure>
         <figure class="gallery-small gallery-b"><img src="{% static 'catalog/images/pagina-09-2.jpeg' %}" alt="Inspiração sofisticada"></figure>
         <div class="gallery-seal"><span>♡</span><b>Feito para<br>o seu momento</b></div>
       </div>
     </section>
 
-    <section class="identity-ribbon reveal"><div><span>Estúdio de decoração</span><strong>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</strong></div><p>Delicadeza, criatividade e cenografia para transformar referências em experiências únicas.</p></section>
+    <section class="identity-ribbon reveal" aria-label="Assinatura do estúdio">
+      <div>
+        <span>Estúdio de decoração</span>
+        <strong>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</strong>
+      </div>
+      <p>Delicadeza, criatividade e cenografia para transformar referências em experiências únicas.</p>
+    </section>
 
     <section class="decorators section" id="decoradoras">
-      <div class="decorators-head reveal"><span class="kicker">Por trás de cada detalhe</span><h2>Duas decoradoras.<br><em>Uma assinatura visual.</em></h2></div>
-      <div class="decorators-layout">
-        <div class="names-stack reveal">
-          <article><span>01</span><h3>{{ site.decorator_one_name }}</h3><p>Decoradora</p><div>Olhar sensível para composição, detalhes e experiências que acolhem.</div></article>
-          <article><span>02</span><h3>{{ site.decorator_two_name }}</h3><p>Decoradora</p><div>Criatividade, equilíbrio visual e cenários que transformam a atmosfera da celebração.</div></article>
+      <div class="editorial-heading reveal">
+        <div>
+          <span class="kicker">Por trás de cada detalhe</span>
+          <h2>Duas decoradoras.<br><em>Uma assinatura visual.</em></h2>
         </div>
-        <div class="story-art reveal"><figure><img src="{% static 'catalog/images/pagina-02-1.jpeg' %}" alt="Nossa história"></figure><blockquote>“Mais do que decorar, queremos criar ambientes que transmitam carinho, despertem emoções e façam parte das melhores memórias.”</blockquote></div>
+        <p>
+          A parceria nasceu da união de talentos que se complementam. Cada projeto mistura sensibilidade,
+          criatividade e atenção aos pequenos detalhes para construir celebrações com personalidade.
+        </p>
+      </div>
+
+      <div class="decorators-editorial">
+        <div class="decorator-cards reveal">
+          <article>
+            <div class="decorator-index">01</div>
+            <div>
+              <small>Decoradora</small>
+              <h3>{{ site.decorator_one_name }}</h3>
+              <p>Olhar sensível para composição, detalhes e experiências que acolhem.</p>
+            </div>
+          </article>
+          <article>
+            <div class="decorator-index">02</div>
+            <div>
+              <small>Decoradora</small>
+              <h3>{{ site.decorator_two_name }}</h3>
+              <p>Criatividade, equilíbrio visual e cenários que transformam a atmosfera da celebração.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="story-mosaic reveal">
+          <figure class="story-main-photo"><img src="{% static 'catalog/images/pagina-06-2.jpeg' %}" alt="Decoração elegante"></figure>
+          <figure class="story-side-photo"><img src="{% static 'catalog/images/pagina-08-2.jpeg' %}" alt="Decoração personalizada"></figure>
+          <div class="story-quote">
+            <span>nossa essência</span>
+            <blockquote>“Mais do que decorar, queremos criar ambientes que transmitam carinho e façam parte das melhores memórias.”</blockquote>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="personalize section" id="como-funciona">
-      <div class="section-head reveal"><div><span class="kicker">Como a personalização funciona</span><h2>Uma referência pode virar<br><em>uma festa totalmente sua.</em></h2></div><p>O catálogo serve como guia visual. A inspiração ajuda você a mostrar o estilo de montagem que gostou; o tema final pode ser outro.</p></div>
-      <div class="example-flow reveal">
-        <article><small>1 • VOCÊ VÊ</small><strong>Inspiração Cerejinha</strong><span>Gostei dos painéis, mesas e arco de balões.</span></article><i>→</i>
-        <article class="accent"><small>2 • VOCÊ CONTA</small><strong>Meu tema é Moranguinho</strong><span>Quero manter a estrutura e adaptar personagens e cores.</span></article><i>→</i>
-        <article><small>3 • NÓS CRIAMOS</small><strong>Sua proposta personalizada</strong><span>A referência vira um ponto de partida, não uma cópia fechada.</span></article>
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Como funciona</span>
+          <h2>Uma referência pode virar<br><em>uma festa totalmente sua.</em></h2>
+        </div>
+        <p>Vale para <strong>todas as inspirações do catálogo</strong>. O exemplo abaixo serve apenas para mostrar como funciona a adaptação.</p>
       </div>
-      <div class="personalize-steps reveal"><div><b>01</b><h3>Escolha</h3><p>Selecione uma ou mais inspirações do portfólio.</p></div><div><b>02</b><h3>Conte seu tema</h3><p>Informe o tema real, data, local, nome e idade.</p></div><div><b>03</b><h3>Diga o que gostou</h3><p>Explique o que quer manter da composição escolhida.</p></div><div><b>04</b><h3>Peça as adaptações</h3><p>Liste cores, personagens e detalhes que deseja mudar.</p></div></div>
+
+      <div class="example-label reveal">Exemplo de personalização</div>
+      <div class="example-flow reveal">
+        <article>
+          <small>1 • VOCÊ VÊ</small>
+          <strong>Inspiração Cerejinha</strong>
+          <span>Gostei dos painéis, mesas e arco de balões.</span>
+        </article>
+        <i>→</i>
+        <article class="accent">
+          <small>2 • VOCÊ CONTA</small>
+          <strong>Meu tema é Moranguinho</strong>
+          <span>Quero manter a estrutura e adaptar personagens e cores.</span>
+        </article>
+        <i>→</i>
+        <article>
+          <small>3 • NÓS CRIAMOS</small>
+          <strong>Sua proposta personalizada</strong>
+          <span>A referência vira um ponto de partida, não uma cópia fechada.</span>
+        </article>
+      </div>
+
+      <div class="personalize-steps reveal">
+        <div><b>01</b><h3>Escolha</h3><p>Selecione uma ou mais inspirações do portfólio.</p></div>
+        <div><b>02</b><h3>Conte seu tema</h3><p>Informe o tema real, data, local, nome e idade.</p></div>
+        <div><b>03</b><h3>Diga o que gostou</h3><p>Explique o que deseja manter da composição escolhida.</p></div>
+        <div><b>04</b><h3>Peça as adaptações</h3><p>Liste cores, personagens e detalhes que deseja mudar.</p></div>
+      </div>
     </section>
 
     <section class="catalog section" id="catalogo">
-      <div class="section-head reveal"><div><span class="kicker">Portfólio de inspirações</span><h2>Encontre a base visual<br><em>para o seu momento.</em></h2></div><p>Os valores são referências da montagem apresentada. O orçamento final é definido após a personalização do tema, tamanho, itens, data e local.</p></div>
-      <div class="catalog-note reveal"><b>Como usar:</b> não precisa escolher o mesmo tema da foto. Escolha a <strong>montagem</strong> que você gostou e conte qual é o tema verdadeiro da sua festa.</div>
-      <div class="catalog-toolbar reveal"><div class="search-box"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Buscar inspiração, tema ou estilo..." autocomplete="off"></div><div class="filters" role="group" aria-label="Filtrar inspirações"><button class="filter active" data-filter="TODOS" type="button">Todos</button><button class="filter" data-filter="INFANTIL" type="button">Infantil</button><button class="filter" data-filter="ADULTO" type="button">Adulto</button><button class="filter" data-filter="EVENTOS" type="button">Eventos</button></div></div>
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Portfólio de inspirações</span>
+          <h2>Encontre a base visual<br><em>para o seu momento.</em></h2>
+        </div>
+        <p>Os valores são referências da montagem apresentada. O orçamento final é definido após personalização, tamanho, itens, data e local.</p>
+      </div>
+
+      <div class="catalog-note reveal">
+        <div class="catalog-note-icon">♡</div>
+        <div><b>Escolha pela composição, não pelo personagem.</b><span>Gostou da montagem? Ela pode ser adaptada para o tema que você quiser.</span></div>
+      </div>
+
+      <div class="catalog-toolbar reveal">
+        <div class="search-box"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Buscar inspiração, tema ou estilo..." autocomplete="off"></div>
+        <div class="filters" role="group" aria-label="Filtrar inspirações">
+          <button class="filter active" data-filter="TODOS" type="button">Todos</button>
+          <button class="filter" data-filter="INFANTIL" type="button">Infantil</button>
+          <button class="filter" data-filter="ADULTO" type="button">Adulto</button>
+          <button class="filter" data-filter="EVENTOS" type="button">Eventos</button>
+        </div>
+      </div>
+
       <div class="grid" id="catalogGrid">
         {% for item in decorations %}
         <article class="card reveal" data-category="{{ item.category }}" data-search="{{ item.title|lower }} {{ item.description|lower }} {{ item.get_category_display|lower }}">
-          <button class="image-button" type="button" data-full="{{ item.image_src }}" aria-label="Ampliar {{ item.title }}"><img src="{{ item.image_src }}" alt="{{ item.title }}" loading="lazy"><span class="image-number">{{ forloop.counter|stringformat:"02d" }}</span><span class="image-view">Ver inspiração ↗</span></button>
-          <div class="card-copy"><div class="meta"><small>{{ item.get_category_display }}</small><strong>Referência <b>R$ {{ item.price }}</b></strong></div><h3>{{ item.title }}</h3><p>{{ item.description }}</p><div class="adapt-badge">♡ Pode ser adaptada para outro tema</div><button class="add-btn" type="button" data-id="{{ item.id }}" data-title="{{ item.title|escape }}" data-price="{{ item.price }}" data-image="{{ item.image_src }}"><span>Quero esta inspiração</span><b>＋</b></button></div>
+          <button class="image-button" type="button" data-full="{{ item.image_src }}" aria-label="Ampliar {{ item.title }}">
+            <img src="{{ item.image_src }}" alt="{{ item.title }}" loading="lazy">
+            <span class="image-number">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="image-view">Ampliar ↗</span>
+          </button>
+          <div class="card-copy">
+            <div class="meta">
+              <small>{{ item.get_category_display }}</small>
+              <strong>Referência <b>R$ {{ item.price }}</b></strong>
+            </div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <div class="card-bottom">
+              <span class="adapt-badge">♡ Adaptável para outro tema</span>
+              <button class="add-btn" type="button"
+                data-id="{{ item.id }}"
+                data-title="{{ item.title|escape }}"
+                data-price="{{ item.price }}"
+                data-image="{{ item.image_src }}">
+                <span>Quero esta inspiração</span><b>＋</b>
+              </button>
+            </div>
+          </div>
         </article>
         {% endfor %}
       </div>
@@ -88,47 +217,149 @@
     </section>
 
     <section class="instagram-section section" id="instagram">
-      <div class="section-head reveal"><div><span class="kicker">Acompanhe os bastidores</span><h2>Mais trabalhos,<br><em>mais inspirações.</em></h2></div><p>Conheça os perfis das decoradoras e acompanhe novos cenários, detalhes e celebrações.</p></div>
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Acompanhe os bastidores</span>
+          <h2>Mais trabalhos,<br><em>mais inspirações.</em></h2>
+        </div>
+        <p>Conheça os perfis das decoradoras e acompanhe novos cenários, detalhes e celebrações.</p>
+      </div>
+
       <div class="instagram-grid reveal">
-        {% if site.instagram_one %}<a class="instagram-card" href="{{ site.instagram_one_url }}" target="_blank" rel="noopener"><div class="ig-icon"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg></div><div><small>Instagram</small><h3>{{ site.decorator_one_name }}</h3><p>{{ site.instagram_one }}</p></div><span>Visitar perfil ↗</span></a>{% endif %}
-        {% if site.instagram_two %}<a class="instagram-card" href="{{ site.instagram_two_url }}" target="_blank" rel="noopener"><div class="ig-icon"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg></div><div><small>Instagram</small><h3>{{ site.decorator_two_name }}</h3><p>{{ site.instagram_two }}</p></div><span>Visitar perfil ↗</span></a>{% endif %}
+        {% if site.instagram_one %}
+        <a class="instagram-card" href="{{ site.instagram_one_url }}" target="_blank" rel="noopener">
+          <div class="ig-icon"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg></div>
+          <div><small>Instagram</small><h3>{{ site.decorator_one_name }}</h3><p>{{ site.instagram_one }}</p></div>
+          <span>Visitar perfil ↗</span>
+        </a>
+        {% endif %}
+        {% if site.instagram_two %}
+        <a class="instagram-card" href="{{ site.instagram_two_url }}" target="_blank" rel="noopener">
+          <div class="ig-icon"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3Zm0 7.8A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1Zm5.1-8.5a1.1 1.1 0 1 1 1.1-1.1 1.1 1.1 0 0 1-1.1 1.1Z"/></svg></div>
+          <div><small>Instagram</small><h3>{{ site.decorator_two_name }}</h3><p>{{ site.instagram_two }}</p></div>
+          <span>Visitar perfil ↗</span>
+        </a>
+        {% endif %}
       </div>
     </section>
 
-    <section class="cta-section section" id="contato"><div class="cta-card reveal"><div><span class="kicker light">Seu momento começa aqui</span><h2>Encontrou uma inspiração?</h2><p>Selecione a referência, conte o tema verdadeiro da festa e descreva as adaptações. O site registra tudo e abre o WhatsApp com a solicitação organizada.</p></div><div class="cta-actions"><button class="btn light-btn" id="ctaCart" type="button">Personalizar inspiração</button>{% if site.owner_whatsapp %}<a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20Aline%20Nayane%20%26%20%C3%89rica%20Carina%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener">Falar diretamente ↗</a>{% endif %}</div></div></section>
+    <section class="cta-section" id="contato">
+      <div class="cta-card reveal">
+        <div class="cta-ornament">✦</div>
+        <div>
+          <span class="kicker light">Seu momento começa aqui</span>
+          <h2>Encontrou uma inspiração?</h2>
+          <p>Escolha a referência, conte o tema verdadeiro da festa e descreva as adaptações. Nós usamos essas informações para iniciar o atendimento de forma organizada.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="btn light-btn" id="ctaCart" type="button">Personalizar inspiração</button>
+          {% if site.owner_whatsapp %}
+          <a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20Aline%20Nayane%20%26%20%C3%89rica%20Carina%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener">Falar diretamente ↗</a>
+          {% endif %}
+        </div>
+      </div>
+    </section>
   </main>
 
   <aside class="drawer" id="cartDrawer" aria-hidden="true">
-    <div class="drawer-head"><div><small>Personalize sua referência</small><h2>Minha solicitação</h2></div><button id="closeCart" aria-label="Fechar" type="button">×</button></div>
-    <div class="drawer-intro"><b>Importante:</b> a inspiração escolhida é apenas o ponto de partida. Informe abaixo o tema real da sua festa e como deseja adaptar a montagem.</div>
-    <div id="cartItems" class="cart-items"></div><div class="total-row"><span>Total de referência</span><strong id="cartTotal">R$ 0,00</strong></div>
-    <form id="checkoutForm">
+    <div class="drawer-head">
+      <div><small>Personalize sua referência</small><h2>Minha solicitação</h2></div>
+      <button id="closeCart" aria-label="Fechar" type="button">×</button>
+    </div>
+
+    <section class="drawer-step drawer-summary-step active" id="drawerSummaryStep">
+      <div class="drawer-intro">
+        <b>Primeiro confira sua inspiração.</b>
+        Você pode escolher uma ou mais referências. Depois, no próximo passo, conta o tema real da festa e o que deseja adaptar.
+      </div>
+
+      <div class="summary-empty" id="summaryEmpty">
+        <div class="summary-empty-icon">♡</div>
+        <h3>Escolha uma inspiração para começar</h3>
+        <p>Feche esta janela e selecione no portfólio a composição que mais combina com o que você imaginou.</p>
+        <button type="button" class="summary-back-catalog" id="backToCatalog">Ver inspirações</button>
+      </div>
+
+      <div class="summary-selected" id="summarySelected" hidden>
+        <div class="summary-kicker">Sua seleção</div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="total-row"><span>Total de referência</span><strong id="cartTotal">R$ 0,00</strong></div>
+
+        <div class="selection-reminder">
+          <span>✦</span>
+          <div>
+            <b>O tema da foto não precisa ser o seu.</b>
+            <p>No próximo passo você informa o tema verdadeiro da festa e explica o que quer manter ou modificar.</p>
+          </div>
+        </div>
+
+        <button class="continue-personalization" id="continuePersonalization" type="button">
+          <span>Continuar personalização</span><b>→</b>
+        </button>
+        <button class="add-more-inspirations" id="addMoreInspirations" type="button">＋ Adicionar outra inspiração</button>
+      </div>
+    </section>
+
+    <section class="drawer-step drawer-form-step" id="drawerFormStep" hidden>
+      <button class="back-summary" id="backToSummary" type="button">← Voltar para inspirações escolhidas</button>
+      <div class="drawer-form-header">
+        <span>Etapa final</span>
+        <h3>Conte como será a sua festa</h3>
+        <p>Agora personalize a referência escolhida para o tema verdadeiro do seu evento.</p>
+      </div>
+
+      <form id="checkoutForm">
       {% csrf_token %}
       <div class="form-section-title"><span>01</span><div><b>Quem está solicitando?</b><small>Dados para atendimento</small></div></div>
-      <div class="form-row"><label>Seu nome<input name="name" required minlength="2" autocomplete="name" placeholder="Seu nome"></label><label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="(98) 99999-9999"></label></div>
+      <div class="form-row">
+        <label>Seu nome<input name="name" required minlength="2" autocomplete="name" placeholder="Seu nome"></label>
+        <label>Seu WhatsApp<input name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="(98) 99999-9999"></label>
+      </div>
 
       <div class="form-section-title"><span>02</span><div><b>Como será a festa?</b><small>O tema real pode ser diferente da inspiração</small></div></div>
       <label>Qual é o tema real da sua festa? <em>obrigatório</em><input name="event_theme" required minlength="2" placeholder="Ex.: Moranguinho, Minnie, Safari, 50 anos..."></label>
-      <div class="form-row"><label>Tipo de evento<select name="event_type"><option value="">Selecione</option><option value="ANIVERSARIO">Aniversário</option><option value="CHÁ">Chá / Revelação / Bebê</option><option value="CASAMENTO">Casamento / Bodas</option><option value="CORPORATIVO">Evento corporativo</option><option value="OUTRO">Outro</option></select></label><label>Data <small>(opcional)</small><input name="event_date" type="date"></label></div>
-      <div class="form-row"><label>Nome do aniversariante / homenageado<input name="celebrant_name" placeholder="Ex.: Ana Luísa"></label><label>Idade<input name="celebrant_age" type="number" min="0" max="130" inputmode="numeric" placeholder="Ex.: 5"></label></div>
+      <div class="form-row">
+        <label>Tipo de evento<select name="event_type"><option value="">Selecione</option><option value="ANIVERSARIO">Aniversário</option><option value="CHÁ">Chá / Revelação / Bebê</option><option value="CASAMENTO">Casamento / Bodas</option><option value="CORPORATIVO">Evento corporativo</option><option value="OUTRO">Outro</option></select></label>
+        <label>Data <small>(opcional)</small><input name="event_date" type="date"></label>
+      </div>
+      <div class="form-row">
+        <label>Nome do aniversariante / homenageado<input name="celebrant_name" placeholder="Ex.: Ana Luísa"></label>
+        <label>Idade<input name="celebrant_age" type="number" min="0" max="130" inputmode="numeric" placeholder="Ex.: 5"></label>
+      </div>
       <label>Local do evento <small>(opcional)</small><input name="event_location" placeholder="Bairro, salão, cidade ou endereço"></label>
 
-      <div class="form-section-title"><span>03</span><div><b>O que vamos personalizar?</b><small>Conte exatamente o que gostou e o que quer mudar</small></div></div>
+      <div class="form-section-title"><span>03</span><div><b>O que vamos personalizar?</b><small>Conte o que gostou e o que deseja mudar</small></div></div>
       <label>O que você quer manter da inspiração? <small>(opcional)</small><textarea name="keep_details" rows="3" placeholder="Ex.: gostei da disposição dos painéis, do arco de balões e das mesas..."></textarea></label>
       <label>O que você quer adaptar ou mudar? <small>(opcional)</small><textarea name="change_details" rows="3" placeholder="Ex.: quero trocar para personagens da Moranguinho e mudar algumas cores..."></textarea></label>
       <label>Outras observações <small>(opcional)</small><textarea name="notes" rows="3" placeholder="Quantidade de convidados, preferências, detalhes importantes..."></textarea></label>
-      <label class="consent"><input type="checkbox" name="consent_whatsapp" checked> <span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
+      <label class="consent"><input type="checkbox" name="consent_whatsapp" checked><span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
       <button class="submit-order" type="submit"><span>Registrar e abrir WhatsApp</span><b>→</b></button>
-      <p class="form-note">100% sem API paga: o pedido é salvo no sistema e o WhatsApp abre com a mensagem pronta. Você apenas confere e toca em enviar. Nenhum pagamento é realizado pelo site.</p>
+      <p class="form-note">O pedido é salvo no sistema e o WhatsApp abre com a mensagem pronta. Nenhum pagamento é realizado pelo site.</p>
       <div id="checkoutResult" aria-live="polite"></div>
-    </form>
+      </form>
+    </section>
   </aside>
+
   <div class="overlay" id="overlay"></div>
   <dialog id="imageModal"><button id="closeModal" aria-label="Fechar" type="button">×</button><img id="modalImage" alt=""></dialog>
 
-  {% if site.owner_whatsapp %}<a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><span class="wa-icon">W</span><span class="wa-copy"><b>Fale com as decoradoras</b><small>WhatsApp</small></span></a>{% endif %}
+  {% if site.owner_whatsapp %}
+  <a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <span class="wa-icon">W</span><span class="wa-tooltip">Falar com as decoradoras</span>
+  </a>
+  {% endif %}
 
-  <footer><div class="footer-brand"><img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="Logo"><span><b>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</b><small>Decoração autoral para momentos especiais</small></span></div><div class="footer-links">{% if site.instagram_one %}<a href="{{ site.instagram_one_url }}" target="_blank">{{ site.instagram_one }}</a>{% endif %}{% if site.instagram_two %}<a href="{{ site.instagram_two_url }}" target="_blank">{{ site.instagram_two }}</a>{% endif %}<a href="#inicio">Voltar ao topo ↑</a></div></footer>
+  <footer>
+    <div class="footer-brand">
+      <img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="Logo">
+      <span><b>{{ site.decorator_one_name }} & {{ site.decorator_two_name }}</b><small>Decoração autoral para momentos especiais</small></span>
+    </div>
+    <div class="footer-links">
+      {% if site.instagram_one %}<a href="{{ site.instagram_one_url }}" target="_blank">{{ site.instagram_one }}</a>{% endif %}
+      {% if site.instagram_two %}<a href="{{ site.instagram_two_url }}" target="_blank">{{ site.instagram_two }}</a>{% endif %}
+      <a href="#inicio">Voltar ao topo ↑</a>
+    </div>
+  </footer>
 
   <script src="{% static 'catalog/site.js' %}"></script>
   <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');</script>
