@@ -13,11 +13,27 @@ class SiteSettings(models.Model):
         max_length=220,
         default="Transformamos inspirações em cenários únicos para momentos inesquecíveis."
     )
+    # Campo legado: mantido apenas para compatibilidade com versões anteriores.
+    # O fluxo novo usa um WhatsApp separado para cada decoradora.
     owner_whatsapp = models.CharField(
         max_length=30,
         blank=True,
-        default="5598996127032",
-        help_text="Número que receberá as solicitações. Ex.: 5598999999999"
+        default="",
+        help_text="Campo legado. O atendimento usa os WhatsApps individuais abaixo."
+    )
+    decorator_one_whatsapp = models.CharField(
+        max_length=30,
+        blank=True,
+        default="5598984669115",
+        verbose_name="WhatsApp da Aline Nayane",
+        help_text="Formato internacional, somente números. Ex.: 5598984669115"
+    )
+    decorator_two_whatsapp = models.CharField(
+        max_length=30,
+        blank=True,
+        default="",
+        verbose_name="WhatsApp da Érika Carina",
+        help_text="Formato internacional, somente números. Cadastre para aparecer como opção no site."
     )
     instagram_one = models.CharField(max_length=100, default="@aline.naiane.35", blank=True)
     instagram_two = models.CharField(max_length=100, default="@erikacarin_decor", blank=True)

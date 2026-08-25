@@ -189,22 +189,26 @@ search?.addEventListener("input", () => {
   applyCatalogFilters();
 });
 
-const modal = document.querySelector("#imageModal");
-const modalImage = document.querySelector("#modalImage");
 
 const whatsappChooser = document.querySelector("#whatsappChooser");
-const waAlineLink = document.querySelector("#waAlineLink");
-const waErikaLink = document.querySelector("#waErikaLink");
 let pendingWhatsappMessage = "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração.";
 
 function buildWaLink(number, message){
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  const digits = String(number || "").replace(/\D/g, "");
+  return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(message || "")}` : "#";
 }
 
 function openWhatsappChooser(message){
   pendingWhatsappMessage = message || pendingWhatsappMessage;
-  if(waAlineLink) waAlineLink.href = buildWaLink("5598984669115", pendingWhatsappMessage);
-  if(waErikaLink) waErikaLink.href = buildWaLink("5598996127032", pendingWhatsappMessage);
+  const choices = document.querySelectorAll(".wa-choice[data-wa-number]");
+  choices.forEach(choice => {
+    choice.href = buildWaLink(choice.dataset.waNumber, pendingWhatsappMessage);
+  });
+  if(choices.length === 1){
+    // Ainda mostra a escolha para manter a experiência consistente.
+    whatsappChooser?.showModal();
+    return;
+  }
   whatsappChooser?.showModal();
 }
 
@@ -213,29 +217,22 @@ function closeWhatsappChooser(){
 }
 
 document.querySelectorAll(".open-whatsapp-selector").forEach(btn =>
-  btn.addEventListener("click", () => openWhatsappChooser("Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração."))
+  btn.addEventListener("click", () => openWhatsappChooser(
+    "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração."
+  ))
 );
 document.querySelector("#closeWhatsappChooser")?.addEventListener("click", closeWhatsappChooser);
-whatsappChooser?.addEventListener("click", (event) => {
+
+whatsappChooser?.addEventListener("click", event => {
   const rect = whatsappChooser.getBoundingClientRect();
-  const clickedInside = (
-    event.clientX >= rect.left &&
-    event.clientX <= rect.right &&
-    event.clientY >= rect.top &&
-    event.clientY <= rect.bottom
-  );
-  if(!clickedInside) closeWhatsappChooser();
+  const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
+                 event.clientY >= rect.top && event.clientY <= rect.bottom;
+  if(!inside) closeWhatsappChooser();
 });
 
-function extractMessageFromWaLink(url){
-  try{
-    const u = new URL(url);
-    const message = u.searchParams.get("text");
-    return message ? decodeURIComponent(message) : "";
-  }catch(e){
-    return "";
-  }
-}
+
+const modal = document.querySelector("#imageModal");
+const modalImage = document.querySelector("#modalImage");
 
 
 document.querySelectorAll(".image-button").forEach(btn => btn.addEventListener("click", () => {
@@ -305,11 +302,11 @@ form?.addEventListener("submit", async e => {
         </div>`;
     }
 
-    if(json.owner_whatsapp_link){
-      const message = extractMessageFromWaLink(json.owner_whatsapp_link) || "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração.";
+    const message = json.whatsapp_message || "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração.";
+    if(document.querySelectorAll(".wa-choice[data-wa-number]").length){
       setTimeout(() => { openWhatsappChooser(message); }, 450);
     }else if(result){
-      result.innerHTML += '<div class="result-error">Os WhatsApps das decoradoras ainda não foram configurados corretamente.</div>';
+      result.innerHTML += '<div class="result-error">Cadastre pelo menos um WhatsApp das decoradoras no painel administrativo.</div>';
     }
   }catch(error){
     if(result) result.innerHTML = `<div class="result-error">${error.message}</div>`;

@@ -24,9 +24,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         site = SiteSettings.current()
+        if not site.decorator_one_whatsapp:
+            site.decorator_one_whatsapp = "5598984669115"; changed.append("decorator_one_whatsapp")
         changed = []
-        if not site.owner_whatsapp:
-            site.owner_whatsapp = "5598984669115"; changed.append("owner_whatsapp")
         if site.decorator_one_name == "Aline Naiane":
             site.decorator_one_name = "Aline Nayane"; changed.append("decorator_one_name")
         if site.decorator_two_name == "Erika Carina":

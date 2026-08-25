@@ -75,10 +75,10 @@ class DecorationAdmin(admin.ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
-    list_display = ("business_name", "decorator_one_name", "decorator_two_name", "owner_whatsapp", "enabled")
+    list_display = ("business_name", "decorator_one_name", "decorator_two_name", "decorator_one_whatsapp", "decorator_two_whatsapp", "enabled")
     fieldsets = (
         ("Identidade", {"fields": ("business_name", "decorator_one_name", "decorator_two_name", "owners", "hero_title")}),
-        ("Atendimento e redes sociais", {"fields": ("owner_whatsapp", "instagram_one", "instagram_two")}),
+        ("Atendimento e redes sociais", {"fields": ("decorator_one_whatsapp", "decorator_two_whatsapp", "instagram_one", "instagram_two")}),
         ("Publicação", {"fields": ("enabled",)}),
     )
 

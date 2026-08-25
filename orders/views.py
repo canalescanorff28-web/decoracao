@@ -101,7 +101,12 @@ def create_order(request):
 
     site = SiteSettings.current()
     message = format_order(order)
-    owner_link = wa_link(site.owner_whatsapp, message)
+
+    # Compatibilidade com clientes antigos em cache:
+    # se uma versão antiga do JavaScript ainda tentar usar owner_whatsapp_link,
+    # ela será direcionada para a Aline — nunca para o número pessoal antigo.
+    fallback_number = site.decorator_one_whatsapp or site.decorator_two_whatsapp
+    owner_link = wa_link(fallback_number, message) if fallback_number else ""
 
     return JsonResponse({
         "ok": True,
@@ -109,7 +114,8 @@ def create_order(request):
         "status": order.status,
         "total_reference": str(order.total_reference),
         "owner_whatsapp_link": owner_link,
-        "delivery_mode": "free_whatsapp_link",
+        "whatsapp_message": message,
+        "delivery_mode": "free_whatsapp_selector",
     }, status=201)
 
 
