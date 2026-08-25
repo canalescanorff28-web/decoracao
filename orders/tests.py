@@ -9,7 +9,8 @@ class OrderApiTests(TestCase):
     def setUp(self):
         site = SiteSettings.current()
         site.decorator_one_whatsapp = "5598984669115"
-        site.save(update_fields=["decorator_one_whatsapp"])
+        site.decorator_two_whatsapp = "5598984673264"
+        site.save(update_fields=["decorator_one_whatsapp", "decorator_two_whatsapp"])
         self.deco = Decoration.objects.create(
             title="Inspiração Cerejinha",
             slug="inspiracao-cerejinha",

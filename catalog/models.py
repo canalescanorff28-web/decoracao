@@ -31,9 +31,9 @@ class SiteSettings(models.Model):
     decorator_two_whatsapp = models.CharField(
         max_length=30,
         blank=True,
-        default="",
+        default="5598984673264",
         verbose_name="WhatsApp da Érika Carina",
-        help_text="Formato internacional, somente números. Cadastre para aparecer como opção no site."
+        help_text="Formato internacional, somente números. Ex.: 5598984673264"
     )
     instagram_one = models.CharField(max_length=100, default="@aline.naiane.35", blank=True)
     instagram_two = models.CharField(max_length=100, default="@erikacarin_decor", blank=True)
