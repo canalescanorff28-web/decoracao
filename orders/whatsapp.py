@@ -7,19 +7,12 @@ def normalize_phone(value):
     return re.sub(r"\D", "", value or "")
 
 
-def whatsapp_send_url(phone, message):
-    """
-    URL oficial gratuita de handoff para o WhatsApp.
-
-    A query inteira é serializada no servidor em UTF-8 e sai como ASCII
-    percent-encoded. Isso evita que JavaScript, DOM, service worker ou
-    redirecionadores intermediários precisem manipular os emojis.
-    """
+def _encoded_query(phone, message):
     phone = normalize_phone(phone)
     if not phone:
         return ""
 
-    query = urlencode(
+    return urlencode(
         {
             "phone": phone,
             "text": message or "",
@@ -29,12 +22,30 @@ def whatsapp_send_url(phone, message):
         quote_via=quote,
         safe="",
     )
-    return f"https://api.whatsapp.com/send?{query}"
+
+
+def whatsapp_web_url(phone, message):
+    """
+    Abre diretamente o WhatsApp Web no desktop.
+
+    Evita a etapa intermediária de api.whatsapp.com, que em alguns ambientes
+    substitui emojis por caracteres de substituição.
+    """
+    query = _encoded_query(phone, message)
+    return f"https://web.whatsapp.com/send?{query}" if query else ""
+
+
+def whatsapp_mobile_url(phone, message):
+    """
+    Abre diretamente o aplicativo WhatsApp em celulares compatíveis.
+    """
+    query = _encoded_query(phone, message)
+    return f"whatsapp://send?{query}" if query else ""
 
 
 def wa_link(phone, message):
-    # Compatibilidade com partes antigas do projeto.
-    return whatsapp_send_url(phone, message)
+    # Compatibilidade para clientes antigos: prioriza o WhatsApp Web.
+    return whatsapp_web_url(phone, message)
 
 
 def brl(value):

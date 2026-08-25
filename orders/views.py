@@ -11,7 +11,12 @@ from django.views.decorators.http import require_GET, require_POST
 
 from catalog.models import Decoration, SiteSettings
 from .models import Order, OrderItem
-from .whatsapp import format_order, wa_link, whatsapp_send_url
+from .whatsapp import (
+    format_order,
+    wa_link,
+    whatsapp_mobile_url,
+    whatsapp_web_url,
+)
 
 
 def _json(payload, *, status=200):
@@ -35,14 +40,17 @@ def _whatsapp_number(site, decorator):
 
 def _whatsapp_redirect(request, phone, message):
     """
-    Evita colocar a mensagem inteira no cabeçalho HTTP Location.
+    Página intermediária leve que escolhe:
+    - desktop -> web.whatsapp.com
+    - celular -> protocolo whatsapp://
 
-    Em alguns proxies, uma URL de WhatsApp com muitos emojis e dados do pedido
-    ultrapassa o limite de tamanho do header e vira 5xx. O alvo fica no corpo
-    HTML e o navegador faz a navegação automaticamente.
+    A mensagem é codificada no servidor em UTF-8 e nenhuma URL longa é enviada
+    em um header HTTP Location.
     """
-    target = whatsapp_send_url(phone, message)
-    if not target:
+    web_target = whatsapp_web_url(phone, message)
+    mobile_target = whatsapp_mobile_url(phone, message)
+
+    if not web_target or not mobile_target:
         return _json(
             {"ok": False, "error": "WhatsApp não configurado."},
             status=404,
@@ -51,7 +59,10 @@ def _whatsapp_redirect(request, phone, message):
     response = render(
         request,
         "orders/whatsapp_handoff.html",
-        {"target": target},
+        {
+            "web_target": web_target,
+            "mobile_target": mobile_target,
+        },
         status=200,
     )
     response["Cache-Control"] = "no-store, no-cache, must-revalidate"
@@ -408,8 +419,13 @@ def create_order(request):
         site.decorator_one_whatsapp
         or site.decorator_two_whatsapp
     )
+    fallback_person = (
+        "aline"
+        if site.decorator_one_whatsapp
+        else "erika"
+    )
     owner_link = (
-        wa_link(fallback_number, message)
+        f"/api/orders/{order.code}/whatsapp/{fallback_person}/"
         if fallback_number
         else ""
     )
@@ -429,7 +445,7 @@ def create_order(request):
                 "aline": f"/api/orders/{order.code}/whatsapp/aline/",
                 "erika": f"/api/orders/{order.code}/whatsapp/erika/",
             },
-            "delivery_mode": "server-side-whatsapp-handoff",
+            "delivery_mode": "direct-web-mobile-whatsapp-handoff",
         },
         status=201,
     )

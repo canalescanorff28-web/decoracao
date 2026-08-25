@@ -174,7 +174,7 @@ def sitemap_xml(request):
 @never_cache
 def service_worker(request):
     js = r"""
-const CACHE = 'aline-erika-decor-v11';
+const CACHE = 'aline-erika-decor-v12';
 const PUBLIC_STATIC = ['/static/', '/inspiracoes/'];
 
 self.addEventListener('install', event => {

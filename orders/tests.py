@@ -70,8 +70,8 @@ class OrderApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         payload = response.json()
         self.assertTrue(payload["ok"])
-        self.assertIn("api.whatsapp.com/send", payload["owner_whatsapp_link"])
-        self.assertEqual(payload["delivery_mode"], "server-side-whatsapp-handoff")
+        self.assertTrue(payload["owner_whatsapp_link"].startswith("/api/orders/"))
+        self.assertEqual(payload["delivery_mode"], "direct-web-mobile-whatsapp-handoff")
         self.assertIn("whatsapp_routes", payload)
 
         message = payload["whatsapp_message"]
@@ -154,7 +154,7 @@ class OrderApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.content.decode("utf-8")
 
-        self.assertIn("https://api.whatsapp.com/send?", html)
+        self.assertIn("https://web.whatsapp.com/send?", html)
         # 🌸 em UTF-8 percent-encoded.
         self.assertIn("%F0%9F%8C%B8", html)
         # ✨ em UTF-8 percent-encoded.
@@ -182,8 +182,9 @@ class OrderApiTests(TestCase):
         response = self.client.get("/api/whatsapp/aline/")
         self.assertEqual(response.status_code, 200)
         html = response.content.decode("utf-8")
-        self.assertIn("api.whatsapp.com/send", html)
+        self.assertIn("web.whatsapp.com/send", html)
         self.assertIn("%F0%9F", html)
+        self.assertIn("whatsapp://send?", html)
 
     def test_format_order_uses_real_newlines(self):
         self.client.post(
