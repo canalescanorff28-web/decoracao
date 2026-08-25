@@ -27,7 +27,7 @@ def upgrade_identity(apps, schema_editor):
         site.hero_title = "Transformamos inspirações em cenários únicos para momentos inesquecíveis."
         changed.append("hero_title")
     if not site.owner_whatsapp:
-        site.owner_whatsapp = "5598996127032"
+        site.owner_whatsapp = "5598984669115"
         changed.append("owner_whatsapp")
     if changed:
         site.save(update_fields=changed)

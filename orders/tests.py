@@ -8,7 +8,7 @@ from .whatsapp import format_order
 class OrderApiTests(TestCase):
     def setUp(self):
         site = SiteSettings.current()
-        site.owner_whatsapp = "5598996127032"
+        site.owner_whatsapp = "5598984669115"
         site.save(update_fields=["owner_whatsapp"])
         self.deco = Decoration.objects.create(
             title="Inspiração Cerejinha",
@@ -35,7 +35,7 @@ class OrderApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         payload = response.json()
         self.assertTrue(payload["ok"])
-        self.assertIn("wa.me/5598996127032", payload["owner_whatsapp_link"])
+        self.assertIn("wa.me/5598984669115", payload["owner_whatsapp_link"])
         order = Order.objects.get(code=payload["order_code"])
         self.assertEqual(order.event_theme, "Moranguinho")
         self.assertIn("Moranguinho", format_order(order))

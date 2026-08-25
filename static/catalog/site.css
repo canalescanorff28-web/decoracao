@@ -336,7 +336,8 @@ dialog button{position:absolute;right:10px;top:10px;width:38px;height:38px;borde
   border:1px solid #d9ebdf;transition:.22s
 }
 .whatsapp-float:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(30,15,25,.22)}
-.wa-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#1fa855;color:#fff;font-weight:900}
+.wa-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#1fa855;color:#fff;font-weight:900;overflow:hidden}
+.wa-logo{width:100%;height:100%;display:block;object-fit:cover}
 .wa-tooltip{
   position:absolute;right:62px;white-space:nowrap;opacity:0;pointer-events:none;
   padding:8px 10px;border-radius:10px;background:#261421;color:#fff;

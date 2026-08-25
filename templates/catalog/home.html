@@ -254,7 +254,7 @@
         <div class="cta-actions">
           <button class="btn light-btn" id="ctaCart" type="button">Personalizar inspiração</button>
           {% if site.owner_whatsapp %}
-          <a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20Aline%20Nayane%20%26%20%C3%89rica%20Carina%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener">Falar diretamente ↗</a>
+          <a class="btn ghost-light" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20de%20Aline%20Nayane%20%26%20%C3%89rica%20Carina%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener">WhatsApp da Aline Nayane ↗</a>
           {% endif %}
         </div>
       </div>
@@ -344,8 +344,8 @@
   <dialog id="imageModal"><button id="closeModal" aria-label="Fechar" type="button">×</button><img id="modalImage" alt=""></dialog>
 
   {% if site.owner_whatsapp %}
-  <a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
-    <span class="wa-icon">W</span><span class="wa-tooltip">Falar com as decoradoras</span>
+  <a class="whatsapp-float" href="https://wa.me/{{ site.owner_whatsapp }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20conversar%20sobre%20uma%20decora%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="WhatsApp da Aline Nayane">
+    <span class="wa-icon"><img class="wa-logo" src="{% static 'catalog/whatsapp-logo.png' %}" alt="WhatsApp"></span><span class="wa-tooltip">WhatsApp da Aline Nayane</span>
   </a>
   {% endif %}
 

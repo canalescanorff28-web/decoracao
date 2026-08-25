@@ -9,7 +9,7 @@ def upgrade_existing_settings(apps, schema_editor):
 
     changed = []
     if not getattr(settings, "owner_whatsapp", ""):
-        settings.owner_whatsapp = "5598996127032"
+        settings.owner_whatsapp = "5598984669115"
         changed.append("owner_whatsapp")
     if settings.business_name in ("", "Catálogo Decorações"):
         settings.business_name = "Aline & Erika Decorações"
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="sitesettings",
             name="owner_whatsapp",
-            field=models.CharField(blank=True, default="5598996127032", help_text="Número que receberá os pedidos. Ex.: 5598999999999", max_length=30),
+            field=models.CharField(blank=True, default="5598984669115", help_text="Número que receberá os pedidos. Ex.: 5598999999999", max_length=30),
         ),
         migrations.RunPython(upgrade_existing_settings, migrations.RunPython.noop),
     ]
