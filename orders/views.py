@@ -4,13 +4,13 @@ from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST
 
 from catalog.models import Decoration, SiteSettings
 from .models import Order, OrderItem
-from .whatsapp import format_order, wa_link
+from .whatsapp import format_order, wa_link, whatsapp_send_url
 
 
 def _json(payload, *, status=200):
@@ -21,6 +21,65 @@ def _json(payload, *, status=200):
     )
     response["Cache-Control"] = "no-store"
     return response
+
+
+def _whatsapp_number(site, decorator):
+    decorator = (decorator or "").strip().lower()
+    if decorator == "aline":
+        return site.decorator_one_whatsapp
+    if decorator == "erika":
+        return site.decorator_two_whatsapp
+    return ""
+
+
+def _whatsapp_redirect(phone, message):
+    target = whatsapp_send_url(phone, message)
+    if not target:
+        return _json(
+            {"ok": False, "error": "WhatsApp não configurado."},
+            status=404,
+        )
+
+    response = HttpResponseRedirect(target)
+    response["Cache-Control"] = "no-store"
+    response["Referrer-Policy"] = "no-referrer"
+    return response
+
+
+@require_GET
+@never_cache
+def contact_whatsapp(request, decorator):
+    site = SiteSettings.current()
+    phone = _whatsapp_number(site, decorator)
+    name = (
+        site.decorator_one_name
+        if decorator == "aline"
+        else site.decorator_two_name
+    )
+
+    message = (
+        f"Olá, {name}! 😊\n\n"
+        "Vim pelo site de Aline Nayane & Érika Carina e gostaria de "
+        "conversar sobre uma decoração. 🎈✨"
+    )
+    return _whatsapp_redirect(phone, message)
+
+
+@require_GET
+@never_cache
+def order_whatsapp_redirect(request, code, decorator):
+    try:
+        order = Order.objects.prefetch_related("items").get(code=code)
+    except Order.DoesNotExist:
+        return _json(
+            {"ok": False, "error": "Solicitação não encontrada."},
+            status=404,
+        )
+
+    site = SiteSettings.current()
+    phone = _whatsapp_number(site, decorator)
+    message = format_order(order)
+    return _whatsapp_redirect(phone, message)
 
 
 @require_GET
@@ -348,9 +407,14 @@ def create_order(request):
             "total_reference": str(order.total_reference),
             "owner_whatsapp_link": owner_link,
             "whatsapp_message": message,
-            # ASCII-only: evita corrupção de emoji e preserva \n como %0A no wa.me.
+            # Compatibilidade com JavaScript antigo.
             "whatsapp_message_encoded": quote(message, safe=""),
-            "delivery_mode": "free-whatsapp-selector",
+            # Fluxo novo: o navegador transporta somente uma rota ASCII curta.
+            "whatsapp_routes": {
+                "aline": f"/api/orders/{order.code}/whatsapp/aline/",
+                "erika": f"/api/orders/{order.code}/whatsapp/erika/",
+            },
+            "delivery_mode": "server-side-whatsapp-handoff",
         },
         status=201,
     )

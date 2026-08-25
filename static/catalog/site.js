@@ -239,29 +239,26 @@ search?.addEventListener("input", () => {
 
 
 const whatsappChooser = document.querySelector("#whatsappChooser");
-let pendingWhatsappMessage = "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
 
-let pendingWhatsappEncoded = "";
+function setWhatsappChoiceRoutes(routes=null){
+  document.querySelectorAll(".wa-choice[data-wa-person]").forEach(choice => {
+    const person = choice.dataset.waPerson;
 
-function buildWaLink(number, message, encodedMessage=""){
-  const digits = String(number || "").replace(/\D/g, "");
-  if(!digits) return "#";
-  const encoded = encodedMessage || encodeURIComponent(message || "");
-  return `https://wa.me/${digits}?text=${encoded}`;
+    // Pedido recém-criado: o servidor recompõe toda a mensagem e redireciona.
+    if(routes?.[person]){
+      choice.href = routes[person];
+      return;
+    }
+
+    // Contato geral: também passa pelo Django; nenhum emoji trafega no JS.
+    choice.href = `/api/whatsapp/${encodeURIComponent(person)}/`;
+  });
 }
 
-function openWhatsappChooser(message, encodedMessage=""){
-  pendingWhatsappMessage = message || pendingWhatsappMessage;
-  pendingWhatsappEncoded = encodedMessage || "";
-  const choices = document.querySelectorAll(".wa-choice[data-wa-number]");
-  choices.forEach(choice => {
-    choice.href = buildWaLink(
-      choice.dataset.waNumber,
-      pendingWhatsappMessage,
-      pendingWhatsappEncoded
-    );
-  });
+function openWhatsappChooser(routes=null){
+  const choices = document.querySelectorAll(".wa-choice[data-wa-person]");
   if(!choices.length) return;
+  setWhatsappChoiceRoutes(routes);
   whatsappChooser?.showModal();
 }
 
@@ -270,11 +267,13 @@ function closeWhatsappChooser(){
 }
 
 document.querySelectorAll(".open-whatsapp-selector").forEach(btn =>
-  btn.addEventListener("click", () => openWhatsappChooser(
-    "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração."
-  ))
+  btn.addEventListener("click", () => openWhatsappChooser())
 );
-document.querySelector("#closeWhatsappChooser")?.addEventListener("click", closeWhatsappChooser);
+
+document.querySelector("#closeWhatsappChooser")?.addEventListener(
+  "click",
+  closeWhatsappChooser
+);
 
 whatsappChooser?.addEventListener("click", event => {
   const rect = whatsappChooser.getBoundingClientRect();
@@ -477,10 +476,9 @@ form?.addEventListener("submit", async e => {
         </div>`;
     }
 
-    const message = json.whatsapp_message || "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
-    const encodedMessage = json.whatsapp_message_encoded || "";
-    if(document.querySelectorAll(".wa-choice[data-wa-number]").length){
-      setTimeout(() => { closeCart(); openWhatsappChooser(message, encodedMessage); }, 450);
+    const routes = json.whatsapp_routes || null;
+    if(document.querySelectorAll(".wa-choice[data-wa-person]").length){
+      setTimeout(() => { closeCart(); openWhatsappChooser(routes); }, 450);
     }else if(result){
       result.innerHTML += '<div class="result-error">Cadastre pelo menos um WhatsApp das decoradoras no painel administrativo.</div>';
     }

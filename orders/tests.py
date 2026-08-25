@@ -70,7 +70,9 @@ class OrderApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         payload = response.json()
         self.assertTrue(payload["ok"])
-        self.assertIn("wa.me/5598984669115", payload["owner_whatsapp_link"])
+        self.assertIn("api.whatsapp.com/send", payload["owner_whatsapp_link"])
+        self.assertEqual(payload["delivery_mode"], "server-side-whatsapp-handoff")
+        self.assertIn("whatsapp_routes", payload)
 
         message = payload["whatsapp_message"]
         self.assertIn("🌸", message)
@@ -137,6 +139,47 @@ class OrderApiTests(TestCase):
         self.assertNotIn("customer_name", data)
         self.assertNotIn("customer_whatsapp", data)
         self.assertNotIn("event_theme", data)
+
+
+    def test_server_side_whatsapp_handoff_preserves_emojis(self):
+        created = self.client.post(
+            "/api/orders/",
+            data=self.payload(),
+            content_type="application/json",
+        ).json()
+
+        route = created["whatsapp_routes"]["aline"]
+        response = self.client.get(route)
+
+        self.assertEqual(response.status_code, 302)
+        location = response["Location"]
+
+        self.assertTrue(location.startswith("https://api.whatsapp.com/send?"))
+        # 🌸 em UTF-8 percent-encoded.
+        self.assertIn("%F0%9F%8C%B8", location)
+        # ✨ em UTF-8 percent-encoded.
+        self.assertIn("%E2%9C%A8", location)
+        # Quebra de linha real deve chegar codificada.
+        self.assertIn("%0A", location)
+        # U+FFFD (replacement char) não pode existir.
+        self.assertNotIn("%EF%BF%BD", location)
+
+    def test_erika_handoff_uses_erika_number(self):
+        created = self.client.post(
+            "/api/orders/",
+            data=self.payload(),
+            content_type="application/json",
+        ).json()
+
+        response = self.client.get(created["whatsapp_routes"]["erika"])
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("phone=5598984673264", response["Location"])
+
+    def test_generic_whatsapp_contact_uses_server_redirect(self):
+        response = self.client.get("/api/whatsapp/aline/")
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("api.whatsapp.com/send", response["Location"])
+        self.assertIn("%F0%9F", response["Location"])
 
     def test_format_order_uses_real_newlines(self):
         self.client.post(

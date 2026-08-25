@@ -1,16 +1,40 @@
+# -*- coding: utf-8 -*-
 import re
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 
 def normalize_phone(value):
     return re.sub(r"\D", "", value or "")
 
 
-def wa_link(phone, message):
+def whatsapp_send_url(phone, message):
+    """
+    URL oficial gratuita de handoff para o WhatsApp.
+
+    A query inteira é serializada no servidor em UTF-8 e sai como ASCII
+    percent-encoded. Isso evita que JavaScript, DOM, service worker ou
+    redirecionadores intermediários precisem manipular os emojis.
+    """
     phone = normalize_phone(phone)
     if not phone:
         return ""
-    return f"https://wa.me/{phone}?text={quote(message or '', safe='')}"
+
+    query = urlencode(
+        {
+            "phone": phone,
+            "text": message or "",
+        },
+        encoding="utf-8",
+        errors="strict",
+        quote_via=quote,
+        safe="",
+    )
+    return f"https://api.whatsapp.com/send?{query}"
+
+
+def wa_link(phone, message):
+    # Compatibilidade com partes antigas do projeto.
+    return whatsapp_send_url(phone, message)
 
 
 def brl(value):

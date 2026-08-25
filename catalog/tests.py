@@ -40,6 +40,8 @@ class PublicSiteTests(TestCase):
         html = response.content.decode("utf-8")
         self.assertIn('data-wa-number="5598984669115"', html)
         self.assertIn('data-wa-number="5598984673264"', html)
+        self.assertIn('data-wa-person="aline"', html)
+        self.assertIn('data-wa-person="erika"', html)
         self.assertIn('id="useGpsLocation"', html)
         self.assertIn('name="event_city"', html)
         self.assertIn('name="keep_choices"', html)
