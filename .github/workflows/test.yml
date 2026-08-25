@@ -6,12 +6,43 @@ on:
   pull_request:
 
 jobs:
-  django:
+  quality:
     runs-on: ubuntu-latest
+    env:
+      DEBUG: "1"
+      SECRET_KEY: "ci-only-secret-key-not-for-production"
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install -r requirements.txt
-      - run: python manage.py test
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Verificar configuração Django
+        run: python manage.py check
+
+      - name: Verificar migrations esquecidas
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Validar JavaScript
+        run: node --check static/catalog/site.js
+
+      - name: Testar seed de inicialização
+        run: |
+          python manage.py migrate --noinput
+          python manage.py seed_catalog
+          python manage.py seed_catalog
+
+      - name: Rodar testes
+        run: python manage.py test
+
+      - name: Validar arquivos estáticos
+        run: python manage.py collectstatic --no-input

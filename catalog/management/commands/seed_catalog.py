@@ -24,15 +24,35 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         site = SiteSettings.current()
-        if not site.decorator_one_whatsapp:
-            site.decorator_one_whatsapp = "5598984669115"; changed.append("decorator_one_whatsapp")
-        if not site.decorator_two_whatsapp:
-            site.decorator_two_whatsapp = "5598984673264"; changed.append("decorator_two_whatsapp")
         changed = []
+
+        if not site.decorator_one_whatsapp:
+            site.decorator_one_whatsapp = "5598984669115"
+            changed.append("decorator_one_whatsapp")
+
+        if not site.decorator_two_whatsapp:
+            site.decorator_two_whatsapp = "5598984673264"
+            changed.append("decorator_two_whatsapp")
+
         if site.decorator_one_name == "Aline Naiane":
-            site.decorator_one_name = "Aline Nayane"; changed.append("decorator_one_name")
-        if site.decorator_two_name == "Erika Carina":
-            site.decorator_two_name = "Érica Carina"; changed.append("decorator_two_name")
+            site.decorator_one_name = "Aline Nayane"
+            changed.append("decorator_one_name")
+
+        if site.decorator_two_name in {"Erika Carina", "Érica Carina"}:
+            site.decorator_two_name = "Érika Carina"
+            changed.append("decorator_two_name")
+
+        if site.owners in {"Aline Nayane & Érica Carina", "Aline Nayane & Erika Carina"}:
+            site.owners = "Aline Nayane & Érika Carina"
+            changed.append("owners")
+
+        if site.business_name in {
+            "Aline Nayane & Érica Carina Decoração",
+            "Aline Nayane & Erika Carina Decoração",
+        }:
+            site.business_name = "Aline Nayane & Érika Carina Decoração"
+            changed.append("business_name")
+
         if changed:
             site.save(update_fields=changed)
 

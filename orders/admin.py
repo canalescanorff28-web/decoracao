@@ -34,6 +34,8 @@ class OrderAdmin(admin.ModelAdmin):
         ("Compatibilidade técnica", {"fields": ("owner_notified", "customer_notified"), "classes": ("collapse",)}),
     )
     inlines = [OrderItemInline]
+    list_per_page = 50
+    save_on_top = True
 
     @admin.display(description="WhatsApp")
     def whatsapp_shortcut(self, obj):

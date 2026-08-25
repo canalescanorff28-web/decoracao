@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#45132f">
+  <title>{{ site.business_name }} • Em atualização</title>
+  <link rel="icon" href="{% static 'catalog/favicon.ico' %}" sizes="any">
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#fffaf6,#fff2f6);color:#291722;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+    main{width:min(650px,100%);padding:42px;border:1px solid #eadce3;border-radius:28px;background:#fff;box-shadow:0 24px 70px rgba(69,19,47,.12);text-align:center}
+    img{width:120px;height:120px;object-fit:contain;margin:auto}
+    h1{font-family:Georgia,serif;color:#45132f;font-size:clamp(34px,7vw,54px);line-height:1;margin:18px 0}
+    p{color:#756671;line-height:1.8}small{color:#982a5b;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+  </style>
+</head>
+<body>
+  <main>
+    <img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="">
+    <small>Estamos preparando novidades</small>
+    <h1>Voltamos em breve.</h1>
+    <p>O site de {{ site.decorator_one_name }} & {{ site.decorator_two_name }} está passando por uma atualização rápida para deixar sua experiência ainda melhor.</p>
+  </main>
+</body>
+</html>

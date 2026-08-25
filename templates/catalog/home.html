@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#45132f">
-  <meta name="description" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} — inspirações e decorações personalizadas para aniversários, celebrações e eventos.">
+  <meta name="description" content="{{ page_description }}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="{{ canonical_url }}/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decoração">
-  <meta property="og:description" content="Escolha uma inspiração e personalize para o tema real da sua festa.">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:url" content="{{ canonical_url }}/">
+  <meta property="og:image" content="{{ og_image_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decoração">
+  <meta name="twitter:description" content="{{ page_description }}">
+  <meta name="twitter:image" content="{{ og_image_url }}">
   <title>{{ site.decorator_one_name }} & {{ site.decorator_two_name }} | Decoração</title>
   <link rel="icon" href="{% static 'catalog/favicon.ico' %}" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'catalog/favicon-32x32.png' %}">
@@ -15,14 +25,16 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'catalog/apple-touch-icon.png' %}">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
+  <script type="application/ld+json">{{ structured_data|safe }}</script>
 </head>
 <body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <div class="ambient ambient-one"></div>
   <div class="ambient ambient-two"></div>
 
   <header class="topbar" id="siteHeader">
     <a class="brand" href="#inicio" aria-label="Início">
-      <img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="Aline Nayane e Érica Carina Decoração">
+      <img src="{% static 'catalog/logo-aline-nayane-erica-carina.png' %}" alt="Aline Nayane e Érika Carina Decoração">
       <span class="brand-copy">
         <strong>{{ site.decorator_one_name }} <i>&</i> {{ site.decorator_two_name }}</strong>
         <small>Decoradoras • celebrações com assinatura</small>
@@ -37,17 +49,31 @@
       <a href="#contato">Contato</a>
     </nav>
 
-    <button class="cart-button" id="openCart" type="button">
-      <span>Minha inspiração</span><strong id="cartCount">0</strong>
-    </button>
+    <div class="header-tools">
+      <button class="mobile-menu-button" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="cart-button" id="openCart" type="button" aria-label="Abrir inspirações selecionadas">
+        <span>Minha inspiração</span><strong id="cartCount" aria-live="polite">0</strong>
+      </button>
+    </div>
   </header>
 
-  <main>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Navegação móvel" hidden>
+    <a href="#decoradoras">As decoradoras</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#catalogo">Inspirações</a>
+    <a href="#instagram">Instagram</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <main id="conteudo">
     <section class="hero" id="inicio">
       <div class="hero-copy reveal">
         <span class="kicker">Estúdio de decoração • projetos personalizados</span>
         <p class="hero-names">{{ site.decorator_one_name }} <span>&</span> {{ site.decorator_two_name }}</p>
         <h1>Você escolhe a inspiração.<br><em>Nós transformamos em algo só seu.</em></h1>
+        <p class="hero-brand-line">{{ site.hero_title }}</p>
         <p class="hero-lead">
           Nosso portfólio é um ponto de partida. Você pode se apaixonar pela estrutura,
           pela composição ou pelos detalhes de uma montagem e pedir tudo adaptado para
@@ -66,11 +92,11 @@
 
       <div class="hero-gallery reveal" aria-label="Exemplos de inspirações">
         <figure class="gallery-main">
-          <img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Inspiração de decoração" fetchpriority="high">
+          <img src="{% static 'catalog/images/pagina-03-2.jpeg' %}" alt="Inspiração de decoração" fetchpriority="high" decoding="async">
           <figcaption><span>REFERÊNCIA DE MONTAGEM</span><b>Uma inspiração pode ganhar outro tema</b></figcaption>
         </figure>
-        <figure class="gallery-small gallery-a"><img src="{% static 'catalog/images/pagina-07-1.jpeg' %}" alt="Inspiração delicada"></figure>
-        <figure class="gallery-small gallery-b"><img src="{% static 'catalog/images/pagina-09-2.jpeg' %}" alt="Inspiração sofisticada"></figure>
+        <figure class="gallery-small gallery-a"><img src="{% static 'catalog/images/pagina-07-1.jpeg' %}" alt="Inspiração delicada" loading="lazy" decoding="async"></figure>
+        <figure class="gallery-small gallery-b"><img src="{% static 'catalog/images/pagina-09-2.jpeg' %}" alt="Inspiração sofisticada" loading="lazy" decoding="async"></figure>
         <div class="gallery-seal"><span>♡</span><b>Feito para<br>o seu momento</b></div>
       </div>
     </section>
@@ -116,8 +142,8 @@
         </div>
 
         <div class="story-mosaic reveal">
-          <figure class="story-main-photo"><img src="{% static 'catalog/images/pagina-06-2.jpeg' %}" alt="Decoração elegante"></figure>
-          <figure class="story-side-photo"><img src="{% static 'catalog/images/pagina-08-2.jpeg' %}" alt="Decoração personalizada"></figure>
+          <figure class="story-main-photo"><img src="{% static 'catalog/images/pagina-06-2.jpeg' %}" alt="Decoração elegante" loading="lazy" decoding="async"></figure>
+          <figure class="story-side-photo"><img src="{% static 'catalog/images/pagina-08-2.jpeg' %}" alt="Decoração personalizada" loading="lazy" decoding="async"></figure>
           <div class="story-quote">
             <span>nossa essência</span>
             <blockquote>“Mais do que decorar, queremos criar ambientes que transmitam carinho e façam parte das melhores memórias.”</blockquote>
@@ -179,7 +205,7 @@
       </div>
 
       <div class="catalog-toolbar reveal">
-        <div class="search-box"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Buscar inspiração, tema ou estilo..." autocomplete="off"></div>
+        <div class="search-box"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Buscar inspiração, tema ou estilo..." autocomplete="off" aria-label="Buscar inspirações"></div>
         <div class="filters" role="group" aria-label="Filtrar inspirações">
           <button class="filter active" data-filter="TODOS" type="button">Todos</button>
           <button class="filter" data-filter="INFANTIL" type="button">Infantil</button>
@@ -192,7 +218,7 @@
         {% for item in decorations %}
         <article class="card reveal" data-category="{{ item.category }}" data-search="{{ item.title|lower }} {{ item.description|lower }} {{ item.get_category_display|lower }}">
           <button class="image-button" type="button" data-full="{{ item.image_src }}" aria-label="Ampliar {{ item.title }}">
-            <img src="{{ item.image_src }}" alt="{{ item.title }}" loading="lazy">
+            <img src="{{ item.image_src }}" alt="{{ item.title }}" loading="lazy" decoding="async">
             <span class="image-number">{{ forloop.counter|stringformat:"02d" }}</span>
             <span class="image-view">Ampliar ↗</span>
           </button>
@@ -257,7 +283,7 @@
         </div>
         <div class="cta-actions">
           <button class="btn light-btn" id="ctaCart" type="button">Personalizar inspiração</button>
-          {% if site.owner_whatsapp %}
+          {% if site.decorator_one_whatsapp or site.decorator_two_whatsapp %}
           <button class="btn ghost-light open-whatsapp-selector" type="button">Escolher com quem falar ↗</button>
           {% endif %}
         </div>
@@ -314,6 +340,9 @@
 
       <form id="checkoutForm">
       {% csrf_token %}
+      <div class="hp-field" aria-hidden="true">
+        <label>Não preencha este campo<input name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
       <div class="form-section-title"><span>01</span><div><b>Quem está solicitando?</b><small>Dados para atendimento</small></div></div>
       <div class="form-row">
         <label>Seu nome<input name="name" required minlength="2" autocomplete="name" placeholder="Seu nome"></label>
@@ -336,7 +365,7 @@
       <label>O que você quer manter da inspiração? <small>(opcional)</small><textarea name="keep_details" rows="3" placeholder="Ex.: gostei da disposição dos painéis, do arco de balões e das mesas..."></textarea></label>
       <label>O que você quer adaptar ou mudar? <small>(opcional)</small><textarea name="change_details" rows="3" placeholder="Ex.: quero trocar para personagens da Moranguinho e mudar algumas cores..."></textarea></label>
       <label>Outras observações <small>(opcional)</small><textarea name="notes" rows="3" placeholder="Quantidade de convidados, preferências, detalhes importantes..."></textarea></label>
-      <label class="consent"><input type="checkbox" name="consent_whatsapp" checked><span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
+      <label class="consent"><input type="checkbox" name="consent_whatsapp" checked required><span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
       <button class="submit-order" type="submit"><span>Registrar e abrir WhatsApp</span><b>→</b></button>
       <p class="form-note">O pedido é salvo no sistema e o WhatsApp abre com a mensagem pronta. Nenhum pagamento é realizado pelo site.</p>
       <div id="checkoutResult" aria-live="polite"></div>
@@ -347,6 +376,7 @@
   <div class="overlay" id="overlay"></div>
   <dialog id="imageModal"><button id="closeModal" aria-label="Fechar" type="button">×</button><img id="modalImage" alt=""></dialog>
 
+{% if site.decorator_one_whatsapp or site.decorator_two_whatsapp %}
   <button class="whatsapp-float open-whatsapp-selector" type="button" aria-label="Escolher WhatsApp das decoradoras">
     <span class="wa-icon" aria-hidden="true">
       <svg class="wa-logo-svg" viewBox="0 0 24 24" role="img" aria-hidden="true">
@@ -355,6 +385,8 @@
     </span>
     <span class="wa-tooltip">Escolher WhatsApp</span>
   </button>
+  {% endif %}
+
 
   
 <dialog id="whatsappChooser" class="wa-chooser">

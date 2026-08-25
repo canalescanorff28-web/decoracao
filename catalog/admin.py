@@ -1,6 +1,9 @@
+from io import BytesIO
+
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
+from PIL import Image, UnidentifiedImageError
 from .models import Decoration, SiteSettings
 
 
@@ -8,7 +11,7 @@ class DecorationAdminForm(forms.ModelForm):
     image_upload = forms.FileField(
         required=False,
         label="Enviar nova foto",
-        help_text="JPG, PNG ou WEBP. Máximo de 4 MB. A foto fica salva no banco e não some em novos deploys."
+        help_text="JPG, PNG ou WEBP. Até 8 MB; o sistema otimiza automaticamente antes de salvar no banco."
     )
     clear_uploaded_image = forms.BooleanField(
         required=False,
@@ -20,28 +23,63 @@ class DecorationAdminForm(forms.ModelForm):
         fields = "__all__"
 
     def clean_image_upload(self):
-        file = self.cleaned_data.get("image_upload")
-        if not file:
-            return file
-        if file.size > 4 * 1024 * 1024:
-            raise forms.ValidationError("A imagem deve ter no máximo 4 MB.")
-        content_type = getattr(file, "content_type", "") or ""
-        if not content_type.startswith("image/"):
-            raise forms.ValidationError("Envie um arquivo de imagem válido.")
-        return file
+        upload = self.cleaned_data.get("image_upload")
+        if not upload:
+            return upload
+
+        if upload.size > 8 * 1024 * 1024:
+            raise forms.ValidationError("A imagem original deve ter no máximo 8 MB.")
+
+        try:
+            image = Image.open(upload)
+            image.verify()
+            if image.format not in {"JPEG", "PNG", "WEBP"}:
+                raise forms.ValidationError("Use JPG, PNG ou WEBP.")
+        except (UnidentifiedImageError, OSError):
+            raise forms.ValidationError("O arquivo enviado não é uma imagem válida.")
+        finally:
+            upload.seek(0)
+
+        return upload
+
+    @staticmethod
+    def _optimized_image(upload):
+        image = Image.open(upload)
+        image.load()
+
+        if image.mode not in {"RGB", "RGBA"}:
+            image = image.convert(
+                "RGBA" if "transparency" in image.info else "RGB"
+            )
+
+        image.thumbnail((1800, 1800), Image.Resampling.LANCZOS)
+
+        output = BytesIO()
+        image.save(
+            output,
+            format="WEBP",
+            quality=86,
+            method=6,
+        )
+        return output.getvalue(), "image/webp"
 
     def save(self, commit=True):
         instance = super().save(commit=False)
+
         if self.cleaned_data.get("clear_uploaded_image"):
             instance.image_blob = None
             instance.image_mime = ""
+
         upload = self.cleaned_data.get("image_upload")
         if upload:
-            instance.image_blob = upload.read()
-            instance.image_mime = getattr(upload, "content_type", "") or "image/jpeg"
+            blob, mime = self._optimized_image(upload)
+            instance.image_blob = blob
+            instance.image_mime = mime
+
         if commit:
             instance.save()
             self.save_m2m()
+
         return instance
 
 
@@ -52,9 +90,9 @@ class DecorationAdmin(admin.ModelAdmin):
     list_filter = ("category", "active", "featured")
     search_fields = ("title", "description")
     list_editable = ("price", "active", "featured", "display_order")
-    readonly_fields = ("image_preview",)
+    readonly_fields = ("image_preview", "updated_at")
     fieldsets = (
-        ("Inspiração", {"fields": ("title", "slug", "category", "description", "price", "active", "featured", "display_order")}),
+        ("Inspiração", {"fields": ("title", "slug", "category", "description", "price", "active", "featured", "display_order", "updated_at")}),
         ("Foto", {"fields": ("image_preview", "image_upload", "clear_uploaded_image")}),
         ("Imagem avançada / legado", {"fields": ("image_url", "image_path"), "classes": ("collapse",)}),
     )
@@ -89,6 +127,6 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         return False
 
 
-admin.site.site_header = "Aline Nayane & Érica Carina • Administração"
+admin.site.site_header = "Aline Nayane & Érika Carina • Administração"
 admin.site.site_title = "Decoração • Admin"
 admin.site.index_title = "Gerencie inspirações, solicitações e atendimento"

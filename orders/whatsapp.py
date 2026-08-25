@@ -10,7 +10,7 @@ def wa_link(phone, message):
     phone = normalize_phone(phone)
     if not phone:
         return ""
-    return f"https://wa.me/{phone}?text={quote(message)}"
+    return f"https://wa.me/{phone}?text={quote(message or '', safe='')}"
 
 
 def brl(value):
@@ -18,110 +18,129 @@ def brl(value):
     return text.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+def _clean_message_text(value):
+    text = str(value or "").replace("\r\n", "\n").replace("\r", "\n")
+    text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F]", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
 def format_order(order):
     lines = [
-        "✨🎈 *NOVA SOLICITAÇÃO DE DECORAÇÃO* 🎈✨",
-        f"🧾 *Pedido:* {order.code}",
+        "🌸✨ NOVA SOLICITAÇÃO DE DECORAÇÃO ✨🌸",
+        f"🧾 Pedido: {order.code}",
         "",
         "━━━━━━━━━━━━━━━━━━━━",
-        "👤 *DADOS DO CLIENTE*",
+        "👤 DADOS DO CLIENTE",
         "━━━━━━━━━━━━━━━━━━━━",
-        f"🙋 *Nome:* {order.customer_name}",
-        f"📱 *WhatsApp:* {order.customer_whatsapp}",
+        f"🙋 Nome: {_clean_message_text(order.customer_name)}",
+        f"📱 WhatsApp: {_clean_message_text(order.customer_whatsapp)}",
         "",
         "━━━━━━━━━━━━━━━━━━━━",
-        "🎉 *DETALHES DO EVENTO*",
+        "🎉 DETALHES DO EVENTO",
         "━━━━━━━━━━━━━━━━━━━━",
     ]
 
     if order.event_type:
-        lines.append(f"🎊 *Tipo:* {order.get_event_type_display()}")
+        lines.append(f"🎊 Tipo de evento: {_clean_message_text(order.get_event_type_display())}")
     if order.event_theme:
-        lines.append(f"🎨 *Tema da festa:* {order.event_theme}")
+        lines.append(f"🎨 Tema da festa: {_clean_message_text(order.event_theme)}")
     if order.celebrant_name:
-        lines.append(f"🎂 *Aniversariante / homenageado:* {order.celebrant_name}")
+        lines.append(f"🎂 Aniversariante / homenageado: {_clean_message_text(order.celebrant_name)}")
     if order.celebrant_age is not None:
-        lines.append(f"🎈 *Idade:* {order.celebrant_age}")
+        lines.append(f"🎈 Idade: {order.celebrant_age}")
     if order.event_date:
-        lines.append(f"📅 *Data:* {order.event_date.strftime('%d/%m/%Y')}")
+        lines.append(f"📅 Data: {order.event_date.strftime('%d/%m/%Y')}")
     if order.event_location:
-        lines.append(f"📍 *Local:* {order.event_location}")
+        lines.append(f"📍 Local: {_clean_message_text(order.event_location)}")
 
     lines += [
         "",
         "━━━━━━━━━━━━━━━━━━━━",
-        "💡 *INSPIRAÇÕES ESCOLHIDAS*",
+        "💡 INSPIRAÇÕES ESCOLHIDAS",
         "━━━━━━━━━━━━━━━━━━━━",
     ]
 
-    for item in order.items.all():
-        lines.append(
-            f"💗 *{item.title_snapshot}*\\n"
-            f"   💰 Referência: R$ {brl(item.unit_price_snapshot)}"
-        )
+    for index, item in enumerate(order.items.all(), start=1):
+        lines.append(f"🎀 {index}. {_clean_message_text(item.title_snapshot)}")
+        lines.append(f"💰 Valor de referência: R$ {brl(item.unit_price_snapshot)}")
+        lines.append("")
 
     if order.keep_details:
         lines += [
+            "💗 O QUE DESEJA MANTER DA INSPIRAÇÃO",
+            f"💬 {_clean_message_text(order.keep_details)}",
             "",
-            "✅ *O QUE DESEJA MANTER DA INSPIRAÇÃO*",
-            f"💬 {order.keep_details}",
         ]
 
     if order.change_details:
         lines += [
+            "🎨 O QUE DESEJA PERSONALIZAR / ADAPTAR",
+            f"💬 {_clean_message_text(order.change_details)}",
             "",
-            "🎨 *O QUE DESEJA ADAPTAR / MUDAR*",
-            f"💬 {order.change_details}",
         ]
 
     if order.notes:
         lines += [
+            "📝 OBSERVAÇÕES IMPORTANTES",
+            f"💬 {_clean_message_text(order.notes)}",
             "",
-            "📝 *OBSERVAÇÕES IMPORTANTES*",
-            f"💬 {order.notes}",
         ]
 
     lines += [
-        "",
         "━━━━━━━━━━━━━━━━━━━━",
-        "💰 *RESUMO DO ORÇAMENTO*",
+        "💰 INVESTIMENTO DE REFERÊNCIA",
         "━━━━━━━━━━━━━━━━━━━━",
-        f"✨ *Total de referência:* R$ {brl(order.total_reference)}",
+        f"✨ R$ {brl(order.total_reference)}",
         "",
-        "ℹ️ _Este é um valor de referência da(s) inspiração(ões) escolhida(s)._",
-        "O valor final poderá variar conforme:",
-        "• 🎨 tema e nível de personalização",
-        "• 📐 tamanho da montagem",
-        "• 🎀 itens e detalhes escolhidos",
-        "• 📍 local do evento",
-        "• 📅 data e disponibilidade",
+        "ℹ️ O valor acima é uma referência baseada na(s) inspiração(ões) escolhida(s).",
+        "O orçamento final poderá variar de acordo com:",
+        "🎨 tema e nível de personalização",
+        "📐 tamanho e estrutura da montagem",
+        "🎀 itens e detalhes escolhidos",
+        "📍 local do evento",
+        "📅 data e disponibilidade",
         "",
-        "💞 *Próximo passo:* alinhar os detalhes diretamente com a decoradora escolhida.",
+        "💞 PRÓXIMO PASSO",
+        "Escolha Aline Nayane ou Érika Carina no site para continuar o atendimento e alinhar todos os detalhes do evento.",
         "",
-        "🌷 _Solicitação registrada pelo site_",
-        "*Aline Nayane & Érika Carina • Decoração* ✨",
+        "🌷 Aline Nayane & Érika Carina",
+        "Decoração • momentos especiais com personalidade ✨",
     ]
 
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 
 def customer_ack(order):
-    return (
-        f"Olá, {order.customer_name}! 💕 Recebemos sua solicitação {order.code} pelo nosso site. "
-        "Vamos analisar a inspiração escolhida, o tema da sua festa e os detalhes da personalização. "
-        "Em seguida alinhamos disponibilidade e orçamento final por aqui."
-    )
+    return "\n".join([
+        f"🌷 Olá, {_clean_message_text(order.customer_name)}!",
+        "",
+        f"Recebemos sua solicitação {order.code} com sucesso. ✨",
+        "",
+        "🎨 Vamos analisar a inspiração escolhida, o tema da festa e todos os detalhes da personalização.",
+        "📅 Em seguida, alinhamos disponibilidade e orçamento final por aqui.",
+        "",
+        "💕 Aline Nayane & Érika Carina • Decoração",
+    ])
 
 
 def customer_confirmed(order):
-    return (
-        f"Olá, {order.customer_name}! ✨ Sua solicitação {order.code} foi marcada como confirmada. "
-        "Vamos seguir com os próximos detalhes da sua decoração por aqui."
-    )
+    return "\n".join([
+        f"✨ Olá, {_clean_message_text(order.customer_name)}!",
+        "",
+        f"Sua solicitação {order.code} foi confirmada. 🎉",
+        "Agora vamos seguir com os próximos detalhes da sua decoração.",
+        "",
+        "🌷 Aline Nayane & Érika Carina • Decoração",
+    ])
 
 
 def customer_finished(order):
-    return (
-        f"Olá, {order.customer_name}! 💗 A solicitação {order.code} foi finalizada. "
-        "Aline Nayane & Érica Carina agradecem pela confiança!"
-    )
+    return "\n".join([
+        f"💗 Olá, {_clean_message_text(order.customer_name)}!",
+        "",
+        f"A solicitação {order.code} foi finalizada.",
+        "Agradecemos muito pela confiança em nosso trabalho. ✨",
+        "",
+        "🌷 Aline Nayane & Érika Carina • Decoração",
+    ])

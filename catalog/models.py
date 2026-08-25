@@ -5,10 +5,10 @@ from django.utils.text import slugify
 
 
 class SiteSettings(models.Model):
-    business_name = models.CharField(max_length=120, default="Aline Nayane & Érica Carina Decoração")
-    owners = models.CharField(max_length=180, default="Aline Nayane & Érica Carina")
+    business_name = models.CharField(max_length=120, default="Aline Nayane & Érika Carina Decoração")
+    owners = models.CharField(max_length=180, default="Aline Nayane & Érika Carina")
     decorator_one_name = models.CharField(max_length=100, default="Aline Nayane")
-    decorator_two_name = models.CharField(max_length=100, default="Érica Carina")
+    decorator_two_name = models.CharField(max_length=100, default="Érika Carina")
     hero_title = models.CharField(
         max_length=220,
         default="Transformamos inspirações em cenários únicos para momentos inesquecíveis."
@@ -96,6 +96,7 @@ class Decoration(models.Model):
     active = models.BooleanField(default=True, verbose_name="Publicada")
     featured = models.BooleanField(default=False, verbose_name="Destaque")
     display_order = models.PositiveIntegerField(default=0, verbose_name="Ordem")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizada em")
 
     class Meta:
         ordering = ["display_order", "title"]
@@ -120,9 +121,10 @@ class Decoration(models.Model):
     @property
     def image_src(self):
         if self.image_mime and self.pk:
-            return reverse("decoration_image", args=[self.pk])
+            version = int(self.updated_at.timestamp()) if self.updated_at else 1
+            return f'{reverse("decoration_image", args=[self.pk])}?v={version}'
         if self.image_url:
             return self.image_url
         if self.image_path:
             return static(self.image_path)
-        return static("catalog/icon-512.svg")
+        return static("catalog/android-chrome-512x512.png")

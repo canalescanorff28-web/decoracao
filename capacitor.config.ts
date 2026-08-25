@@ -4,7 +4,7 @@ const siteUrl = process.env.SITE_URL || 'https://decoracao.runsite.app';
 
 const config: CapacitorConfig = {
   appId: 'com.catalogodecor.app',
-  appName: 'Aline & Érica Decor',
+  appName: 'Aline & Érika Decor',
   webDir: 'mobile',
   server: {
     url: siteUrl,

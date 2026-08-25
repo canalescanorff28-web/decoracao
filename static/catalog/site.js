@@ -6,8 +6,56 @@ function syncHeader(){
 syncHeader();
 window.addEventListener("scroll", syncHeader, {passive:true});
 
+const mobileMenuToggle = document.querySelector("#mobileMenuToggle");
+const mobileNav = document.querySelector("#mobileNav");
+
+function setMobileMenu(open){
+  if(!mobileMenuToggle || !mobileNav) return;
+  mobileNav.hidden = !open;
+  mobileMenuToggle.setAttribute("aria-expanded", String(open));
+  mobileMenuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+}
+
+mobileMenuToggle?.addEventListener("click", () => {
+  setMobileMenu(mobileNav?.hidden ?? true);
+});
+
+mobileNav?.querySelectorAll("a").forEach(link =>
+  link.addEventListener("click", () => setMobileMenu(false))
+);
+
+
+function loadCart(){
+  try{
+    const parsed = JSON.parse(localStorage.getItem("decor-inspirations") || "[]");
+    if(!Array.isArray(parsed)) return [];
+    return parsed
+      .filter(item => item && Number.isFinite(Number(item.id)))
+      .slice(0, 10)
+      .map(item => ({
+        id:Number(item.id),
+        title:String(item.title || "").slice(0, 180),
+        price:String(item.price || "0"),
+        image:String(item.image || "").slice(0, 1000)
+      }));
+  }catch(error){
+    localStorage.removeItem("decor-inspirations");
+    return [];
+  }
+}
+
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
 const state = {
-  cart: JSON.parse(localStorage.getItem("decor-inspirations") || "[]"),
+  cart: loadCart(),
   filter: "TODOS",
   query: "",
   drawerStep: "summary"
@@ -131,12 +179,12 @@ function renderCart(){
 
   cartItems.innerHTML = state.cart.map(x => `
     <div class="cart-item">
-      <img src="${x.image}" alt="">
+      <img src="${escapeHtml(x.image)}" alt="">
       <div>
-        <b>${x.title}</b>
+        <b>${escapeHtml(x.title)}</b>
         <small>Referência ${money(x.price)}</small>
       </div>
-      <button aria-label="Remover ${x.title}" data-remove="${x.id}" type="button">×</button>
+      <button aria-label="Remover ${escapeHtml(x.title)}" data-remove="${x.id}" type="button">×</button>
     </div>
   `).join("");
 
@@ -191,7 +239,7 @@ search?.addEventListener("input", () => {
 
 
 const whatsappChooser = document.querySelector("#whatsappChooser");
-let pendingWhatsappMessage = "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração.";
+let pendingWhatsappMessage = "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
 
 function buildWaLink(number, message){
   const digits = String(number || "").replace(/\D/g, "");
@@ -204,11 +252,7 @@ function openWhatsappChooser(message){
   choices.forEach(choice => {
     choice.href = buildWaLink(choice.dataset.waNumber, pendingWhatsappMessage);
   });
-  if(choices.length === 1){
-    // Ainda mostra a escolha para manter a experiência consistente.
-    whatsappChooser?.showModal();
-    return;
-  }
+  if(!choices.length) return;
   whatsappChooser?.showModal();
 }
 
@@ -218,7 +262,7 @@ function closeWhatsappChooser(){
 
 document.querySelectorAll(".open-whatsapp-selector").forEach(btn =>
   btn.addEventListener("click", () => openWhatsappChooser(
-    "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração."
+    "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração."
   ))
 );
 document.querySelector("#closeWhatsappChooser")?.addEventListener("click", closeWhatsappChooser);
@@ -269,6 +313,7 @@ form?.addEventListener("submit", async e => {
     change_details: data.get("change_details"),
     notes: data.get("notes"),
     consent_whatsapp: data.get("consent_whatsapp") === "on",
+    website: data.get("website") || "",
     items: state.cart.map(x => x.id)
   };
 
@@ -302,14 +347,14 @@ form?.addEventListener("submit", async e => {
         </div>`;
     }
 
-    const message = json.whatsapp_message || "Olá! Vim pelo site de Aline Nayane & Érica Carina e quero conversar sobre uma decoração.";
+    const message = json.whatsapp_message || "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
     if(document.querySelectorAll(".wa-choice[data-wa-number]").length){
-      setTimeout(() => { openWhatsappChooser(message); }, 450);
+      setTimeout(() => { closeCart(); openWhatsappChooser(message); }, 450);
     }else if(result){
       result.innerHTML += '<div class="result-error">Cadastre pelo menos um WhatsApp das decoradoras no painel administrativo.</div>';
     }
   }catch(error){
-    if(result) result.innerHTML = `<div class="result-error">${error.message}</div>`;
+    if(result) result.innerHTML = `<div class="result-error">${escapeHtml(error.message)}</div>`;
   }finally{
     if(submit){
       submit.disabled = false;
@@ -317,6 +362,15 @@ form?.addEventListener("submit", async e => {
     }
   }
 });
+
+const eventDateInput = form?.querySelector('[name="event_date"]');
+if(eventDateInput){
+  const today = new Date();
+  const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 10);
+  eventDateInput.min = localDate;
+}
 
 renderCart();
 syncButtons();

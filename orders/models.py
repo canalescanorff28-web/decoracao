@@ -4,7 +4,7 @@ from catalog.models import Decoration
 
 
 def generate_code():
-    return "DEC-" + secrets.token_hex(3).upper()
+    return "DEC-" + secrets.token_hex(5).upper()
 
 
 class Order(models.Model):
@@ -31,7 +31,7 @@ class Order(models.Model):
     event_theme = models.CharField(max_length=180, blank=True, verbose_name="Tema real da festa")
     celebrant_name = models.CharField(max_length=120, blank=True, verbose_name="Nome do aniversariante / homenageado")
     celebrant_age = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="Idade")
-    event_date = models.DateField(null=True, blank=True, verbose_name="Data do evento")
+    event_date = models.DateField(null=True, blank=True, verbose_name="Data do evento", db_index=True)
     event_location = models.CharField(max_length=220, blank=True, verbose_name="Local do evento")
 
     keep_details = models.TextField(blank=True, verbose_name="O que quer manter da inspiração")
@@ -39,14 +39,14 @@ class Order(models.Model):
     notes = models.TextField(blank=True, verbose_name="Outras observações")
 
     consent_whatsapp = models.BooleanField(default=False, verbose_name="Autorizou contato via WhatsApp")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="RECEBIDO")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="RECEBIDO", db_index=True)
     total_reference = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Total de referência")
 
     # Mantidos por compatibilidade com versões anteriores; o modo final usa wa.me gratuito.
     owner_notified = models.BooleanField(default=False)
     customer_notified = models.BooleanField(default=False)
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em", db_index=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizado em")
 
     class Meta:
