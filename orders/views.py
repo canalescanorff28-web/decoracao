@@ -4,7 +4,8 @@ from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST
 
@@ -32,7 +33,14 @@ def _whatsapp_number(site, decorator):
     return ""
 
 
-def _whatsapp_redirect(phone, message):
+def _whatsapp_redirect(request, phone, message):
+    """
+    Evita colocar a mensagem inteira no cabeçalho HTTP Location.
+
+    Em alguns proxies, uma URL de WhatsApp com muitos emojis e dados do pedido
+    ultrapassa o limite de tamanho do header e vira 5xx. O alvo fica no corpo
+    HTML e o navegador faz a navegação automaticamente.
+    """
     target = whatsapp_send_url(phone, message)
     if not target:
         return _json(
@@ -40,9 +48,16 @@ def _whatsapp_redirect(phone, message):
             status=404,
         )
 
-    response = HttpResponseRedirect(target)
-    response["Cache-Control"] = "no-store"
+    response = render(
+        request,
+        "orders/whatsapp_handoff.html",
+        {"target": target},
+        status=200,
+    )
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response["Pragma"] = "no-cache"
     response["Referrer-Policy"] = "no-referrer"
+    response["X-Robots-Tag"] = "noindex, nofollow"
     return response
 
 
@@ -62,7 +77,7 @@ def contact_whatsapp(request, decorator):
         "Vim pelo site de Aline Nayane & Érika Carina e gostaria de "
         "conversar sobre uma decoração. 🎈✨"
     )
-    return _whatsapp_redirect(phone, message)
+    return _whatsapp_redirect(request, phone, message)
 
 
 @require_GET
@@ -79,7 +94,7 @@ def order_whatsapp_redirect(request, code, decorator):
     site = SiteSettings.current()
     phone = _whatsapp_number(site, decorator)
     message = format_order(order)
-    return _whatsapp_redirect(phone, message)
+    return _whatsapp_redirect(request, phone, message)
 
 
 @require_GET

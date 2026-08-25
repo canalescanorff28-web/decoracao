@@ -151,18 +151,20 @@ class OrderApiTests(TestCase):
         route = created["whatsapp_routes"]["aline"]
         response = self.client.get(route)
 
-        self.assertEqual(response.status_code, 302)
-        location = response["Location"]
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode("utf-8")
 
-        self.assertTrue(location.startswith("https://api.whatsapp.com/send?"))
+        self.assertIn("https://api.whatsapp.com/send?", html)
         # 🌸 em UTF-8 percent-encoded.
-        self.assertIn("%F0%9F%8C%B8", location)
+        self.assertIn("%F0%9F%8C%B8", html)
         # ✨ em UTF-8 percent-encoded.
-        self.assertIn("%E2%9C%A8", location)
+        self.assertIn("%E2%9C%A8", html)
         # Quebra de linha real deve chegar codificada.
-        self.assertIn("%0A", location)
+        self.assertIn("%0A", html)
         # U+FFFD (replacement char) não pode existir.
-        self.assertNotIn("%EF%BF%BD", location)
+        self.assertNotIn("%EF%BF%BD", html)
+        # Não usa mais um Location gigante.
+        self.assertNotIn("Location", response.headers)
 
     def test_erika_handoff_uses_erika_number(self):
         created = self.client.post(
@@ -172,14 +174,16 @@ class OrderApiTests(TestCase):
         ).json()
 
         response = self.client.get(created["whatsapp_routes"]["erika"])
-        self.assertEqual(response.status_code, 302)
-        self.assertIn("phone=5598984673264", response["Location"])
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode("utf-8")
+        self.assertIn("phone=5598984673264", html)
 
     def test_generic_whatsapp_contact_uses_server_redirect(self):
         response = self.client.get("/api/whatsapp/aline/")
-        self.assertEqual(response.status_code, 302)
-        self.assertIn("api.whatsapp.com/send", response["Location"])
-        self.assertIn("%F0%9F", response["Location"])
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode("utf-8")
+        self.assertIn("api.whatsapp.com/send", html)
+        self.assertIn("%F0%9F", html)
 
     def test_format_order_uses_real_newlines(self):
         self.client.post(

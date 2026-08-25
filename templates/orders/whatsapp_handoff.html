@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#45132f">
+  <title>Abrindo WhatsApp…</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;
+      background:linear-gradient(145deg,#fffaf6,#fff1f6);
+      color:#2c1722;font-family:system-ui,-apple-system,Segoe UI,sans-serif
+    }
+    main{
+      width:min(520px,100%);padding:34px 28px;border:1px solid #eadbe3;
+      border-radius:24px;background:#fff;text-align:center;
+      box-shadow:0 22px 70px rgba(69,19,47,.12)
+    }
+    .icon{
+      width:62px;height:62px;margin:0 auto 16px;border-radius:20px;
+      display:grid;place-items:center;background:#25D366;color:#fff
+    }
+    .icon svg{width:34px;height:34px;fill:currentColor}
+    h1{margin:0 0 10px;font-family:Georgia,serif;color:#45132f;font-size:30px}
+    p{margin:0 auto 20px;max-width:390px;color:#766672;line-height:1.65;font-size:13px}
+    a{
+      display:inline-flex;align-items:center;justify-content:center;min-height:46px;
+      padding:11px 18px;border-radius:999px;background:#45132f;color:#fff;
+      font-weight:800;font-size:13px;text-decoration:none
+    }
+    small{display:block;margin-top:14px;color:#988690;font-size:11px}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M19.1 4.9A9.87 9.87 0 0 0 12.07 2C6.57 2 2.1 6.47 2.1 11.97c0 1.76.46 3.49 1.33 5.01L2 22l5.15-1.35a9.92 9.92 0 0 0 4.91 1.26h.01c5.5 0 9.97-4.47 9.97-9.97 0-2.66-1.03-5.16-2.94-7.04Zm-7.03 15.33h-.01a8.3 8.3 0 0 1-4.22-1.15l-.3-.18-3.06.8.82-2.98-.2-.31a8.24 8.24 0 0 1-1.27-4.43c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.42 5.85c0 4.56-3.71 8.25-8.28 8.25Zm4.53-6.18c-.25-.13-1.47-.72-1.69-.8-.23-.08-.39-.13-.56.12s-.64.8-.78.97c-.14.17-.29.19-.54.06a6.78 6.78 0 0 1-1.99-1.22 7.53 7.53 0 0 1-1.38-1.72c-.15-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.41h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.23.9 2.42 1.02 2.59.12.16 1.77 2.7 4.3 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.17-.06-.1-.22-.16-.47-.29Z"/>
+      </svg>
+    </div>
+    <h1>Abrindo o WhatsApp…</h1>
+    <p>Sua solicitação já está registrada. Estamos preparando a conversa com todos os detalhes do evento.</p>
+
+    <a id="openWhatsapp" href="{{ target }}">Abrir WhatsApp agora</a>
+    <small>Se não abrir automaticamente, toque no botão acima.</small>
+  </main>
+
+  <script>
+    (function(){
+      var link = document.getElementById("openWhatsapp");
+      if(!link) return;
+      window.setTimeout(function(){
+        window.location.replace(link.href);
+      }, 120);
+    })();
+  </script>
+</body>
+</html>
