@@ -1,4 +1,5 @@
 import json
+from urllib.parse import quote
 from datetime import date
 from decimal import Decimal
 
@@ -40,6 +41,77 @@ def _text(data, key, limit):
     return str(data.get(key) or "").strip()[:limit]
 
 
+def _choice_list(data, key, allowed):
+    raw = data.get(key) or []
+    if not isinstance(raw, list):
+        return []
+    clean = []
+    for value in raw:
+        value = str(value or "").strip()
+        if value in allowed and value not in clean:
+            clean.append(value)
+    return clean
+
+
+def _decimal_coordinate(data, key, minimum, maximum):
+    raw = str(data.get(key) or "").strip()
+    if not raw:
+        return None
+    try:
+        value = Decimal(raw)
+    except Exception:
+        return None
+    if value < Decimal(str(minimum)) or value > Decimal(str(maximum)):
+        return None
+    return value
+
+
+def _compose_event_location(data):
+    venue = _text(data, "event_venue", 120)
+    street = _text(data, "event_street", 180)
+    number = _text(data, "event_number", 40)
+    neighborhood = _text(data, "event_neighborhood", 120)
+    city = _text(data, "event_city", 120)
+    state = _text(data, "event_state", 80)
+    complement = _text(data, "event_complement", 120)
+    reference = _text(data, "event_reference", 180)
+    postcode = _text(data, "event_postcode", 20)
+
+    parts = []
+    if venue:
+        parts.append(venue)
+
+    street_line = street
+    if number:
+        street_line = f"{street_line}, nº {number}" if street_line else f"Nº {number}"
+    if street_line:
+        parts.append(street_line)
+
+    if neighborhood:
+        parts.append(f"Bairro {neighborhood}")
+
+    city_state = city
+    if state:
+        city_state = f"{city} - {state}" if city else state
+    if city_state:
+        parts.append(city_state)
+
+    if complement:
+        parts.append(f"Complemento: {complement}")
+    if reference:
+        parts.append(f"Referência: {reference}")
+    if postcode:
+        parts.append(f"CEP {postcode}")
+
+    # Compatibilidade: aceita o campo antigo caso o navegador ainda esteja em cache.
+    if not parts:
+        legacy = _text(data, "event_location", 500)
+        if legacy:
+            parts.append(legacy)
+
+    return " • ".join(parts)[:500]
+
+
 @require_POST
 def create_order(request):
     if len(request.body) > 50_000:
@@ -68,6 +140,49 @@ def create_order(request):
     event_type = _text(data, "event_type", 30)
     ids = data.get("items") or []
     consent = bool(data.get("consent_whatsapp"))
+
+    allowed_keep = {
+        "Estrutura da montagem",
+        "Painéis",
+        "Mesas e mobiliário",
+        "Arco de balões",
+        "Flores e folhagens",
+        "Iluminação",
+        "Disposição dos elementos",
+        "Paleta de cores",
+        "Tema / personagens",
+    }
+    allowed_change = {
+        "Trocar tema / personagens",
+        "Mudar cores",
+        "Alterar painéis",
+        "Alterar balões",
+        "Alterar mesas / mobiliário",
+        "Adicionar nome / idade",
+        "Adicionar flores",
+        "Adicionar iluminação",
+        "Redimensionar a montagem",
+    }
+
+    keep_choices = _choice_list(data, "keep_choices", allowed_keep)
+    change_choices = _choice_list(data, "change_choices", allowed_change)
+
+    guest_count = None
+    raw_guests = str(data.get("guest_count") or "").strip()
+    if raw_guests:
+        try:
+            guest_count = int(raw_guests)
+            if guest_count < 1 or guest_count > 100000:
+                raise ValueError
+        except ValueError:
+            return _json(
+                {"ok": False, "error": "Quantidade de convidados inválida."},
+                status=400,
+            )
+
+    event_latitude = _decimal_coordinate(data, "event_latitude", -90, 90)
+    event_longitude = _decimal_coordinate(data, "event_longitude", -180, 180)
+    event_location = _compose_event_location(data)
 
     if len(name) < 2:
         return _json({"ok": False, "error": "Informe seu nome."}, status=400)
@@ -177,7 +292,21 @@ def create_order(request):
             celebrant_name=_text(data, "celebrant_name", 120),
             celebrant_age=celebrant_age,
             event_date=event_date,
-            event_location=_text(data, "event_location", 220),
+            event_location=event_location,
+            event_venue=_text(data, "event_venue", 120),
+            event_city=_text(data, "event_city", 120),
+            event_state=_text(data, "event_state", 80),
+            event_neighborhood=_text(data, "event_neighborhood", 120),
+            event_street=_text(data, "event_street", 180),
+            event_number=_text(data, "event_number", 40),
+            event_complement=_text(data, "event_complement", 120),
+            event_reference=_text(data, "event_reference", 180),
+            event_postcode=_text(data, "event_postcode", 20),
+            event_latitude=event_latitude,
+            event_longitude=event_longitude,
+            guest_count=guest_count,
+            keep_choices=keep_choices,
+            change_choices=change_choices,
             keep_details=_text(data, "keep_details", 3000),
             change_details=_text(data, "change_details", 3000),
             notes=_text(data, "notes", 2500),
@@ -219,6 +348,8 @@ def create_order(request):
             "total_reference": str(order.total_reference),
             "owner_whatsapp_link": owner_link,
             "whatsapp_message": message,
+            # ASCII-only: evita corrupção de emoji e preserva \n como %0A no wa.me.
+            "whatsapp_message_encoded": quote(message, safe=""),
             "delivery_mode": "free-whatsapp-selector",
         },
         status=201,

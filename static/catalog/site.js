@@ -241,16 +241,25 @@ search?.addEventListener("input", () => {
 const whatsappChooser = document.querySelector("#whatsappChooser");
 let pendingWhatsappMessage = "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
 
-function buildWaLink(number, message){
+let pendingWhatsappEncoded = "";
+
+function buildWaLink(number, message, encodedMessage=""){
   const digits = String(number || "").replace(/\D/g, "");
-  return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(message || "")}` : "#";
+  if(!digits) return "#";
+  const encoded = encodedMessage || encodeURIComponent(message || "");
+  return `https://wa.me/${digits}?text=${encoded}`;
 }
 
-function openWhatsappChooser(message){
+function openWhatsappChooser(message, encodedMessage=""){
   pendingWhatsappMessage = message || pendingWhatsappMessage;
+  pendingWhatsappEncoded = encodedMessage || "";
   const choices = document.querySelectorAll(".wa-choice[data-wa-number]");
   choices.forEach(choice => {
-    choice.href = buildWaLink(choice.dataset.waNumber, pendingWhatsappMessage);
+    choice.href = buildWaLink(
+      choice.dataset.waNumber,
+      pendingWhatsappMessage,
+      pendingWhatsappEncoded
+    );
   });
   if(!choices.length) return;
   whatsappChooser?.showModal();
@@ -272,6 +281,114 @@ whatsappChooser?.addEventListener("click", event => {
   const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
                  event.clientY >= rect.top && event.clientY <= rect.bottom;
   if(!inside) closeWhatsappChooser();
+});
+
+
+const gpsButton = document.querySelector("#useGpsLocation");
+const gpsStatus = document.querySelector("#gpsStatus");
+
+function field(name){
+  return form?.querySelector(`[name="${name}"]`);
+}
+
+function setField(name, value, overwrite=false){
+  const input = field(name);
+  if(!input || value === undefined || value === null || value === "") return;
+  if(overwrite || !input.value.trim()) input.value = String(value);
+}
+
+function gpsMessage(text, type=""){
+  if(!gpsStatus) return;
+  gpsStatus.textContent = text;
+  gpsStatus.className = `gps-status ${type}`.trim();
+}
+
+async function reverseGeocode(lat, lon){
+  const url = new URL("https://nominatim.openstreetmap.org/reverse");
+  url.searchParams.set("format", "jsonv2");
+  url.searchParams.set("lat", lat);
+  url.searchParams.set("lon", lon);
+  url.searchParams.set("addressdetails", "1");
+  url.searchParams.set("accept-language", "pt-BR");
+
+  const response = await fetch(url.toString(), {
+    headers:{"Accept":"application/json"}
+  });
+  if(!response.ok) throw new Error("reverse-geocode-failed");
+  return response.json();
+}
+
+function fillAddressFromGps(result){
+  const a = result?.address || {};
+  const city = a.city || a.town || a.municipality || a.village || "";
+  const neighborhood =
+    a.neighbourhood || a.suburb || a.quarter || a.city_district || "";
+  const street = a.road || a.pedestrian || a.residential || "";
+  const state = a.state_code || a.state || "";
+
+  setField("event_city", city, true);
+  setField("event_state", state, true);
+  setField("event_neighborhood", neighborhood, true);
+  setField("event_street", street, true);
+  setField("event_number", a.house_number || "", true);
+  setField("event_postcode", a.postcode || "", true);
+}
+
+gpsButton?.addEventListener("click", () => {
+  if(!navigator.geolocation){
+    gpsMessage("Este navegador não oferece localização por GPS. Preencha o endereço manualmente.", "error");
+    return;
+  }
+
+  gpsButton.disabled = true;
+  gpsButton.textContent = "Localizando...";
+  gpsMessage("Aguardando autorização de localização do aparelho...", "loading");
+
+  navigator.geolocation.getCurrentPosition(
+    async position => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      setField("event_latitude", lat.toFixed(7), true);
+      setField("event_longitude", lon.toFixed(7), true);
+
+      try{
+        gpsMessage("Localização encontrada. Buscando rua e bairro...", "loading");
+        const result = await reverseGeocode(lat, lon);
+        fillAddressFromGps(result);
+        gpsMessage("Endereço preenchido pelo GPS. Confira os campos antes de enviar.", "success");
+      }catch(error){
+        gpsMessage("GPS capturado, mas não foi possível descobrir o endereço automaticamente. Você pode preencher manualmente.", "warning");
+      }finally{
+        gpsButton.disabled = false;
+        gpsButton.textContent = "Atualizar GPS";
+      }
+    },
+    error => {
+      const messages = {
+        1:"Permissão de localização negada. Você pode preencher o endereço manualmente.",
+        2:"Não foi possível obter a localização do aparelho.",
+        3:"A localização demorou demais. Tente novamente."
+      };
+      gpsMessage(messages[error.code] || "Não foi possível usar o GPS.", "error");
+      gpsButton.disabled = false;
+      gpsButton.textContent = "Tentar GPS novamente";
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:12000,
+      maximumAge:60000
+    }
+  );
+});
+
+document.querySelectorAll("[data-guests]").forEach(button => {
+  button.addEventListener("click", () => {
+    const input = document.querySelector("#guestCount");
+    if(!input) return;
+    input.value = button.dataset.guests;
+    input.focus();
+  });
 });
 
 
@@ -308,7 +425,20 @@ form?.addEventListener("submit", async e => {
     celebrant_name: data.get("celebrant_name"),
     celebrant_age: data.get("celebrant_age"),
     event_date: data.get("event_date"),
-    event_location: data.get("event_location"),
+    event_venue: data.get("event_venue"),
+    event_city: data.get("event_city"),
+    event_state: data.get("event_state"),
+    event_neighborhood: data.get("event_neighborhood"),
+    event_street: data.get("event_street"),
+    event_number: data.get("event_number"),
+    event_complement: data.get("event_complement"),
+    event_reference: data.get("event_reference"),
+    event_postcode: data.get("event_postcode"),
+    event_latitude: data.get("event_latitude"),
+    event_longitude: data.get("event_longitude"),
+    guest_count: data.get("guest_count"),
+    keep_choices: data.getAll("keep_choices"),
+    change_choices: data.getAll("change_choices"),
     keep_details: data.get("keep_details"),
     change_details: data.get("change_details"),
     notes: data.get("notes"),
@@ -348,8 +478,9 @@ form?.addEventListener("submit", async e => {
     }
 
     const message = json.whatsapp_message || "Olá! Vim pelo site de Aline Nayane & Érika Carina e quero conversar sobre uma decoração.";
+    const encodedMessage = json.whatsapp_message_encoded || "";
     if(document.querySelectorAll(".wa-choice[data-wa-number]").length){
-      setTimeout(() => { closeCart(); openWhatsappChooser(message); }, 450);
+      setTimeout(() => { closeCart(); openWhatsappChooser(message, encodedMessage); }, 450);
     }else if(result){
       result.innerHTML += '<div class="result-error">Cadastre pelo menos um WhatsApp das decoradoras no painel administrativo.</div>';
     }

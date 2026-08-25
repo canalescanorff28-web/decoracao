@@ -32,7 +32,26 @@ class Order(models.Model):
     celebrant_name = models.CharField(max_length=120, blank=True, verbose_name="Nome do aniversariante / homenageado")
     celebrant_age = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="Idade")
     event_date = models.DateField(null=True, blank=True, verbose_name="Data do evento", db_index=True)
-    event_location = models.CharField(max_length=220, blank=True, verbose_name="Local do evento")
+
+    # Campo legado/resumo: continua existindo para compatibilidade com pedidos antigos.
+    event_location = models.CharField(max_length=500, blank=True, verbose_name="Resumo do local do evento")
+
+    event_venue = models.CharField(max_length=120, blank=True, verbose_name="Nome / tipo do local")
+    event_city = models.CharField(max_length=120, blank=True, verbose_name="Cidade")
+    event_state = models.CharField(max_length=80, blank=True, verbose_name="Estado / UF")
+    event_neighborhood = models.CharField(max_length=120, blank=True, verbose_name="Bairro")
+    event_street = models.CharField(max_length=180, blank=True, verbose_name="Rua / Avenida")
+    event_number = models.CharField(max_length=40, blank=True, verbose_name="Número")
+    event_complement = models.CharField(max_length=120, blank=True, verbose_name="Complemento")
+    event_reference = models.CharField(max_length=180, blank=True, verbose_name="Ponto de referência")
+    event_postcode = models.CharField(max_length=20, blank=True, verbose_name="CEP")
+    event_latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True, editable=False)
+    event_longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True, editable=False)
+
+    guest_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="Quantidade de convidados")
+
+    keep_choices = models.JSONField(default=list, blank=True, verbose_name="Itens que deseja manter")
+    change_choices = models.JSONField(default=list, blank=True, verbose_name="Itens que deseja adaptar")
 
     keep_details = models.TextField(blank=True, verbose_name="O que quer manter da inspiração")
     change_details = models.TextField(blank=True, verbose_name="O que quer adaptar / mudar")

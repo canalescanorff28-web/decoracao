@@ -350,7 +350,21 @@
       </div>
 
       <div class="form-section-title"><span>02</span><div><b>Como será a festa?</b><small>O tema real pode ser diferente da inspiração</small></div></div>
-      <label>Qual é o tema real da sua festa? <em>obrigatório</em><input name="event_theme" required minlength="2" placeholder="Ex.: Moranguinho, Minnie, Safari, 50 anos..."></label>
+      <label>Qual é o tema real da sua festa? <em>obrigatório</em>
+        <input name="event_theme" required minlength="2" list="themeSuggestions" placeholder="Escolha uma sugestão ou escreva qualquer tema">
+      </label>
+      <datalist id="themeSuggestions">
+        <option value="Moranguinho"></option>
+        <option value="Super Mario"></option>
+        <option value="Sonic"></option>
+        <option value="Safari"></option>
+        <option value="Circo"></option>
+        <option value="Ursinha"></option>
+        <option value="Princesas"></option>
+        <option value="Futebol"></option>
+        <option value="Aniversário adulto"></option>
+        <option value="Evento corporativo"></option>
+      </datalist>
       <div class="form-row">
         <label>Tipo de evento<select name="event_type"><option value="">Selecione</option><option value="ANIVERSARIO">Aniversário</option><option value="CHÁ">Chá / Revelação / Bebê</option><option value="CASAMENTO">Casamento / Bodas</option><option value="CORPORATIVO">Evento corporativo</option><option value="OUTRO">Outro</option></select></label>
         <label>Data <small>(opcional)</small><input name="event_date" type="date"></label>
@@ -359,11 +373,102 @@
         <label>Nome do aniversariante / homenageado<input name="celebrant_name" placeholder="Ex.: Ana Luísa"></label>
         <label>Idade<input name="celebrant_age" type="number" min="0" max="130" inputmode="numeric" placeholder="Ex.: 5"></label>
       </div>
-      <label>Local do evento <small>(opcional)</small><input name="event_location" placeholder="Bairro, salão, cidade ou endereço"></label>
+      <div class="form-section-title location-title"><span>03</span><div><b>Onde será o evento?</b><small>Use o GPS ou preencha manualmente</small></div></div>
 
-      <div class="form-section-title"><span>03</span><div><b>O que vamos personalizar?</b><small>Conte o que gostou e o que deseja mudar</small></div></div>
-      <label>O que você quer manter da inspiração? <small>(opcional)</small><textarea name="keep_details" rows="3" placeholder="Ex.: gostei da disposição dos painéis, do arco de balões e das mesas..."></textarea></label>
-      <label>O que você quer adaptar ou mudar? <small>(opcional)</small><textarea name="change_details" rows="3" placeholder="Ex.: quero trocar para personagens da Moranguinho e mudar algumas cores..."></textarea></label>
+      <div class="gps-card">
+        <div>
+          <b>📍 Preencher com minha localização</b>
+          <small>O navegador pedirá sua permissão. Depois você pode corrigir qualquer campo.</small>
+        </div>
+        <button type="button" id="useGpsLocation" class="gps-button">Usar GPS</button>
+      </div>
+      <div id="gpsStatus" class="gps-status" aria-live="polite"></div>
+
+      <div class="form-row">
+        <label>Tipo / nome do local
+          <input name="event_venue" list="venueSuggestions" placeholder="Ex.: Residência, Salão Bela Festa...">
+        </label>
+        <label>Cidade
+          <input name="event_city" list="citySuggestions" placeholder="Escolha ou digite a cidade">
+        </label>
+      </div>
+      <datalist id="venueSuggestions">
+        <option value="Residência"></option>
+        <option value="Salão de festas"></option>
+        <option value="Empresa"></option>
+        <option value="Escola"></option>
+        <option value="Igreja"></option>
+        <option value="Espaço aberto"></option>
+        <option value="Clube"></option>
+        <option value="Restaurante"></option>
+      </datalist>
+      <datalist id="citySuggestions">
+        <option value="Santa Inês"></option>
+      </datalist>
+
+      <div class="form-row location-row">
+        <label>Estado / UF<input name="event_state" placeholder="Ex.: MA"></label>
+        <label>Bairro<input name="event_neighborhood" placeholder="Ex.: Mercado Municipal"></label>
+      </div>
+      <div class="form-row location-row">
+        <label class="street-field">Rua / Avenida<input name="event_street" placeholder="Ex.: Rua Moraes Rego"></label>
+        <label class="number-field">Número<input name="event_number" inputmode="numeric" placeholder="44"></label>
+      </div>
+      <div class="form-row location-row">
+        <label>Complemento<input name="event_complement" placeholder="Casa, bloco, andar..."></label>
+        <label>CEP<input name="event_postcode" inputmode="numeric" placeholder="00000-000"></label>
+      </div>
+      <label>Ponto de referência <small>(opcional)</small><input name="event_reference" placeholder="Ex.: próximo ao mercado, em frente à escola..."></label>
+
+      <input type="hidden" name="event_latitude">
+      <input type="hidden" name="event_longitude">
+
+      <div class="guest-box">
+        <label>Quantidade aproximada de convidados
+          <input name="guest_count" id="guestCount" type="number" min="1" max="100000" inputmode="numeric" placeholder="Ex.: 80">
+        </label>
+        <div class="quick-values" aria-label="Preencher quantidade de convidados">
+          <button type="button" data-guests="30">30</button>
+          <button type="button" data-guests="50">50</button>
+          <button type="button" data-guests="80">80</button>
+          <button type="button" data-guests="100">100</button>
+          <button type="button" data-guests="150">150</button>
+          <button type="button" data-guests="300">300+</button>
+        </div>
+      </div>
+
+      <div class="form-section-title"><span>04</span><div><b>O que vamos personalizar?</b><small>Marque opções rápidas e complemente escrevendo</small></div></div>
+
+      <div class="choice-block">
+        <div class="choice-heading"><b>O que você quer manter?</b><small>Selecione quantos itens quiser</small></div>
+        <div class="choice-chips">
+          <label><input type="checkbox" name="keep_choices" value="Estrutura da montagem"><span>Estrutura</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Painéis"><span>Painéis</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Mesas e mobiliário"><span>Mesas</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Arco de balões"><span>Balões</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Flores e folhagens"><span>Flores</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Iluminação"><span>Iluminação</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Disposição dos elementos"><span>Disposição</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Paleta de cores"><span>Cores</span></label>
+          <label><input type="checkbox" name="keep_choices" value="Tema / personagens"><span>Tema/personagens</span></label>
+        </div>
+      </div>
+      <label>Quer explicar melhor o que deseja manter? <small>(opcional)</small><textarea name="keep_details" rows="3" placeholder="Escreva apenas se quiser acrescentar algum detalhe..."></textarea></label>
+      <div class="choice-block">
+        <div class="choice-heading"><b>O que você quer adaptar ou mudar?</b><small>Selecione e depois escreva detalhes, se necessário</small></div>
+        <div class="choice-chips">
+          <label><input type="checkbox" name="change_choices" value="Trocar tema / personagens"><span>Trocar tema</span></label>
+          <label><input type="checkbox" name="change_choices" value="Mudar cores"><span>Mudar cores</span></label>
+          <label><input type="checkbox" name="change_choices" value="Alterar painéis"><span>Painéis</span></label>
+          <label><input type="checkbox" name="change_choices" value="Alterar balões"><span>Balões</span></label>
+          <label><input type="checkbox" name="change_choices" value="Alterar mesas / mobiliário"><span>Mesas</span></label>
+          <label><input type="checkbox" name="change_choices" value="Adicionar nome / idade"><span>Nome/idade</span></label>
+          <label><input type="checkbox" name="change_choices" value="Adicionar flores"><span>Flores</span></label>
+          <label><input type="checkbox" name="change_choices" value="Adicionar iluminação"><span>Iluminação</span></label>
+          <label><input type="checkbox" name="change_choices" value="Redimensionar a montagem"><span>Tamanho</span></label>
+        </div>
+      </div>
+      <label>Quer explicar melhor a adaptação? <small>(opcional)</small><textarea name="change_details" rows="3" placeholder="Ex.: manter a estrutura, mas trocar o tema para Moranguinho e ajustar as cores..."></textarea></label>
       <label>Outras observações <small>(opcional)</small><textarea name="notes" rows="3" placeholder="Quantidade de convidados, preferências, detalhes importantes..."></textarea></label>
       <label class="consent"><input type="checkbox" name="consent_whatsapp" checked required><span>Autorizo contato pelo WhatsApp para tratar desta solicitação.</span></label>
       <button class="submit-order" type="submit"><span>Registrar e abrir WhatsApp</span><b>→</b></button>

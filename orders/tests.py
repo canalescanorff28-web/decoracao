@@ -36,7 +36,20 @@ class OrderApiTests(TestCase):
             "celebrant_name": "Gabriel",
             "celebrant_age": "6",
             "event_date": (date.today() + timedelta(days=30)).isoformat(),
-            "event_location": "Salão",
+            "event_venue": "Salão de festas",
+            "event_city": "Santa Inês",
+            "event_state": "MA",
+            "event_neighborhood": "Centro",
+            "event_street": "Rua Teste",
+            "event_number": "44",
+            "event_complement": "",
+            "event_reference": "Próximo ao mercado",
+            "event_postcode": "65300000",
+            "event_latitude": "-3.6666667",
+            "event_longitude": "-45.3833333",
+            "guest_count": "100",
+            "keep_choices": ["Estrutura da montagem", "Mesas e mobiliário"],
+            "change_choices": ["Trocar tema / personagens", "Mudar cores"],
             "keep_details": "estrutura e mesas",
             "change_details": "cores e personagens",
             "notes": "evento para 100 pessoas",
@@ -66,7 +79,15 @@ class OrderApiTests(TestCase):
         self.assertIn("cores e personagens", message)
         self.assertIn("evento para 100 pessoas", message)
         self.assertIn("Érika Carina", message)
+        self.assertIn("Convidados: 100", message)
+        self.assertIn("Santa Inês", message)
+        self.assertIn("Estrutura da montagem", message)
+        self.assertIn("Trocar tema / personagens", message)
         self.assertIn("\n", message)
+        encoded = payload["whatsapp_message_encoded"]
+        self.assertNotIn("🌸", encoded)
+        self.assertIn("%F0%9F%8C%B8", encoded)
+        self.assertIn("%0A", encoded)
         self.assertNotIn("\\n", message)
         self.assertNotIn("�", message)
         self.assertNotIn("\\*", message)

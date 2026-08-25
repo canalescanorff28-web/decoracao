@@ -597,3 +597,52 @@ button:disabled{cursor:not-allowed;opacity:.68}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .reveal{opacity:1;transform:none}
 }
+
+
+/* V8 — formulário guiado, localização e escolhas rápidas */
+.gps-card{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin:2px 0 8px;padding:14px 15px;border:1px solid #d9e6dd;border-radius:16px;
+  background:linear-gradient(145deg,#f8fffa,#fff);
+}
+.gps-card b{display:block;color:var(--wine);font-size:10px;margin-bottom:3px}
+.gps-card small{display:block;color:var(--muted);font-size:8px;line-height:1.5}
+.gps-button{
+  flex:0 0 auto;border:0;border-radius:999px;padding:10px 14px;
+  background:#18794e;color:#fff;font-size:9px;font-weight:900
+}
+.gps-button:disabled{opacity:.55}
+.gps-status{min-height:18px;margin:0 0 7px;font-size:8px;line-height:1.5;color:var(--muted)}
+.gps-status.success{color:#18794e}.gps-status.error{color:#b42318}.gps-status.warning{color:#946200}
+.location-row .street-field{flex:2}.location-row .number-field{flex:.75}
+.guest-box{
+  margin:10px 0 4px;padding:13px;border:1px solid var(--line);border-radius:16px;background:#fffafd
+}
+.quick-values{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.quick-values button{
+  border:1px solid #ead5df;border-radius:999px;padding:7px 10px;background:#fff;color:var(--berry);
+  font-size:8px;font-weight:900
+}
+.quick-values button:hover{background:var(--blush)}
+.choice-block{margin:8px 0 12px}
+.choice-heading{display:flex;justify-content:space-between;align-items:end;gap:8px;margin-bottom:7px}
+.choice-heading b{font-size:9px;color:var(--wine)}.choice-heading small{font-size:7px;color:var(--muted)}
+.choice-chips{display:flex;flex-wrap:wrap;gap:7px}
+.choice-chips label{margin:0;cursor:pointer}
+.choice-chips input{
+  position:absolute;opacity:0;pointer-events:none;width:1px;height:1px
+}
+.choice-chips span{
+  display:inline-flex;align-items:center;min-height:32px;padding:7px 11px;border-radius:999px;
+  border:1px solid #e8d3dd;background:#fff;color:#725664;font-size:8px;font-weight:800;transition:.18s
+}
+.choice-chips input:checked+span{
+  border-color:var(--berry);background:var(--wine);color:#fff;
+  box-shadow:0 8px 18px rgba(69,19,47,.12)
+}
+.choice-chips input:focus-visible+span{outline:3px solid rgba(152,42,91,.25);outline-offset:2px}
+@media(max-width:680px){
+  .gps-card{align-items:flex-start;flex-direction:column}
+  .gps-button{width:100%}
+  .choice-heading{display:block}.choice-heading small{display:block;margin-top:2px}
+}

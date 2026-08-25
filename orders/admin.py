@@ -24,13 +24,20 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ("code", "customer_name", "customer_whatsapp", "event_theme", "celebrant_name")
     date_hierarchy = "created_at"
     readonly_fields = (
-        "code", "total_reference", "created_at", "updated_at", "owner_notified", "customer_notified", "whatsapp_tools"
+        "code", "total_reference", "created_at", "updated_at",
+        "owner_notified", "customer_notified", "whatsapp_tools",
+        "event_location",
     )
     fieldsets = (
         ("Solicitação", {"fields": ("code", "status", "total_reference", "created_at", "updated_at")}),
         ("Cliente", {"fields": ("customer_name", "customer_whatsapp", "consent_whatsapp", "whatsapp_tools")}),
-        ("Evento", {"fields": ("event_type", "event_theme", "celebrant_name", "celebrant_age", "event_date", "event_location")}),
-        ("Personalização", {"fields": ("keep_details", "change_details", "notes")}),
+        ("Evento", {"fields": ("event_type", "event_theme", "celebrant_name", "celebrant_age", "event_date", "guest_count")}),
+        ("Local do evento", {"fields": (
+            "event_venue", "event_city", "event_state", "event_neighborhood",
+            "event_street", "event_number", "event_complement", "event_reference",
+            "event_postcode", "event_location"
+        )}),
+        ("Personalização", {"fields": ("keep_choices", "keep_details", "change_choices", "change_details", "notes")}),
         ("Compatibilidade técnica", {"fields": ("owner_notified", "customer_notified"), "classes": ("collapse",)}),
     )
     inlines = [OrderItemInline]

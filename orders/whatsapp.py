@@ -51,8 +51,15 @@ def format_order(order):
         lines.append(f"🎈 Idade: {order.celebrant_age}")
     if order.event_date:
         lines.append(f"📅 Data: {order.event_date.strftime('%d/%m/%Y')}")
+    if order.guest_count:
+        lines.append(f"👥 Convidados: {order.guest_count}")
+
     if order.event_location:
-        lines.append(f"📍 Local: {_clean_message_text(order.event_location)}")
+        lines += [
+            "",
+            "📍 LOCAL DO EVENTO",
+            f"🏠 {_clean_message_text(order.event_location)}",
+        ]
 
     lines += [
         "",
@@ -66,19 +73,21 @@ def format_order(order):
         lines.append(f"💰 Valor de referência: R$ {brl(item.unit_price_snapshot)}")
         lines.append("")
 
-    if order.keep_details:
-        lines += [
-            "💗 O QUE DESEJA MANTER DA INSPIRAÇÃO",
-            f"💬 {_clean_message_text(order.keep_details)}",
-            "",
-        ]
+    if order.keep_choices or order.keep_details:
+        lines.append("💗 O QUE DESEJA MANTER DA INSPIRAÇÃO")
+        for value in order.keep_choices or []:
+            lines.append(f"✓ {_clean_message_text(value)}")
+        if order.keep_details:
+            lines.append(f"💬 {_clean_message_text(order.keep_details)}")
+        lines.append("")
 
-    if order.change_details:
-        lines += [
-            "🎨 O QUE DESEJA PERSONALIZAR / ADAPTAR",
-            f"💬 {_clean_message_text(order.change_details)}",
-            "",
-        ]
+    if order.change_choices or order.change_details:
+        lines.append("🎨 O QUE DESEJA PERSONALIZAR / ADAPTAR")
+        for value in order.change_choices or []:
+            lines.append(f"✓ {_clean_message_text(value)}")
+        if order.change_details:
+            lines.append(f"💬 {_clean_message_text(order.change_details)}")
+        lines.append("")
 
     if order.notes:
         lines += [
@@ -94,7 +103,7 @@ def format_order(order):
         f"✨ R$ {brl(order.total_reference)}",
         "",
         "ℹ️ O valor acima é uma referência baseada na(s) inspiração(ões) escolhida(s).",
-        "O orçamento final poderá variar de acordo com:",
+        "O orçamento final poderá variar conforme:",
         "🎨 tema e nível de personalização",
         "📐 tamanho e estrutura da montagem",
         "🎀 itens e detalhes escolhidos",
@@ -102,14 +111,13 @@ def format_order(order):
         "📅 data e disponibilidade",
         "",
         "💞 PRÓXIMO PASSO",
-        "Escolha Aline Nayane ou Érika Carina no site para continuar o atendimento e alinhar todos os detalhes do evento.",
+        "Escolha Aline Nayane ou Érika Carina para continuar o atendimento e alinhar os detalhes finais.",
         "",
         "🌷 Aline Nayane & Érika Carina",
         "Decoração • momentos especiais com personalidade ✨",
     ]
 
     return "\n".join(lines)
-
 
 def customer_ack(order):
     return "\n".join([

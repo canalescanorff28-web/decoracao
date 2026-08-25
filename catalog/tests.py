@@ -40,6 +40,10 @@ class PublicSiteTests(TestCase):
         html = response.content.decode("utf-8")
         self.assertIn('data-wa-number="5598984669115"', html)
         self.assertIn('data-wa-number="5598984673264"', html)
+        self.assertIn('id="useGpsLocation"', html)
+        self.assertIn('name="event_city"', html)
+        self.assertIn('name="keep_choices"', html)
+        self.assertIn('name="change_choices"', html)
 
     def test_service_worker_does_not_cache_admin_or_api(self):
         response = self.client.get("/service-worker.js")
